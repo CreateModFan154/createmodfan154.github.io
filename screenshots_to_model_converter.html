@@ -66,25 +66,27 @@
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, canvas.width / canvas.height, 0.1, 1000);
-    camera.position.z = 5;
+    
+    // Place the camera inside the green cube
+    camera.position.set(0, 0, 0);
 
     // Add light to the scene
     const light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(5, 5, 5).normalize();
     scene.add(light);
 
-    // Placeholder geometry for the model
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
-    const model = new THREE.Mesh(geometry, material);
-    scene.add(model);
+    // Create the green cube environment
+    const cubeGeometry = new THREE.BoxGeometry(10, 10, 10);
+    const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.BackSide });
+    const greenCube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+    scene.add(greenCube);
 
     // Handle uploaded screenshots
     fileInput.addEventListener('change', (event) => {
       const files = event.target.files;
       screenshotsContainer.innerHTML = ''; // Clear previous images
 
-      Array.from(files).forEach(file => {
+      Array.from(files).forEach((file, index) => {
         const reader = new FileReader();
         reader.onload = (e) => {
           const img = document.createElement('img');
@@ -92,33 +94,35 @@
           img.alt = file.name;
           img.className = 'screenshot';
           screenshotsContainer.appendChild(img);
-          
-          // Estimate placement and add to the 3D model
-          addToModel(file.name);
+
+          // Add the image as a texture to a 3D cube
+          addImageToScene(e.target.result, index);
         };
         reader.readAsDataURL(file);
       });
     });
 
-    // Function to add estimated parts to the model
-    function addToModel(name) {
-      // Example: Add parts to the model based on the filename
-      const randomX = Math.random() * 2 - 1; // Random position X
-      const randomY = Math.random() * 2 - 1; // Random position Y
-      const randomZ = Math.random() * 2 - 1; // Random position Z
+    // Function to add an image as a texture on a red cube
+    function addImageToScene(imageSrc, index) {
+      const textureLoader = new THREE.TextureLoader();
+      textureLoader.load(imageSrc, (texture) => {
+        const imageGeometry = new THREE.BoxGeometry(1, 1, 1);
+        const imageMaterial = new THREE.MeshBasicMaterial({ map: texture });
+        const imageCube = new THREE.Mesh(imageGeometry, imageMaterial);
 
-      const newGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-      const newMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
-      const newPart = new THREE.Mesh(newGeometry, newMaterial);
-      newPart.position.set(randomX, randomY, randomZ);
-      scene.add(newPart);
+        // Randomize positions for now (you can adjust placement logic)
+        const randomX = Math.random() * 5 - 2.5;
+        const randomY = Math.random() * 5 - 2.5;
+        const randomZ = Math.random() * 5 - 2.5;
+
+        imageCube.position.set(randomX, randomY, randomZ);
+        scene.add(imageCube);
+      });
     }
 
     // Animation loop
     function animate() {
       requestAnimationFrame(animate);
-      model.rotation.x += 0.01;
-      model.rotation.y += 0.01;
       renderer.render(scene, camera);
     }
     animate();
