@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convert Screenshots to 3D Model</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      margin-top: 20px;
+    }
+    #upload-container {
+      margin: 20px;
+      padding: 20px;
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 600px;
+      text-align: center;
+    }
+    #upload-container input {
+      margin-top: 10px;
+    }
+    #screenshots-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 20px;
+      gap: 10px;
+    }
+    .screenshot {
+      max-width: 200px;
+      max-height: 200px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Convert Minecraft Screenshots to 3D Model</h1>
+  <div id="upload-container">
+    <p>Upload your Minecraft screenshots to begin:</p>
+    <input type="file" id="fileInput" accept="image/png, image/jpeg" multiple>
+  </div>
+  <div id="screenshots-container"></div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const screenshotsContainer = document.getElementById('screenshots-container');
+
+    fileInput.addEventListener('change', (event) => {
+      const files = event.target.files;
+      screenshotsContainer.innerHTML = ''; // Clear previous images
+
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.alt = file.name;
+          img.className = 'screenshot';
+          screenshotsContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+  </script>
+</body>
+</html>
