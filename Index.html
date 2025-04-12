@@ -33,6 +33,8 @@
       border-radius: 10px;
       font-family: Arial, sans-serif;
       max-width: 400px;
+      max-height: 300px;
+      overflow-y: auto; /* Enables vertical scrolling */
       z-index: 10;
     }
     #about-box h2 {
@@ -119,13 +121,14 @@
     const loader = new THREE.CubeTextureLoader();
     loader.setPath('Panorama/');
 
+    // Updated texture order
     const textureCube = loader.load([
-      'panorama_0.png', // right
+      'panorama_3.png', // right (switched with panorama_0.png)
       'panorama_1.png', // left
       'panorama_4.png', // top
       'panorama_5.png', // bottom
       'panorama_2.png', // front
-      'panorama_3.png', // back
+      'panorama_0.png', // back (switched with panorama_3.png)
     ]);
 
     scene.background = textureCube;
