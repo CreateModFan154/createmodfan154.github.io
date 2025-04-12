@@ -14,9 +14,24 @@
     canvas {
       display: block;
     }
+    #controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 5px;
+    }
+    #controls input {
+      color: white;
+    }
   </style>
 </head>
 <body>
+  <div id="controls">
+    <input type="file" id="fileInput" accept=".json" />
+  </div>
   <script>
     // Scene, Camera, Renderer
     const scene = new THREE.Scene();
@@ -29,14 +44,6 @@
     const light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(5, 5, 5).normalize();
     scene.add(light);
-
-    // Load 3D JSON Model
-    const loader = new THREE.ObjectLoader();
-    loader.load('model.json', (object) => {
-      scene.add(object);
-    }, undefined, (error) => {
-      console.error('An error occurred while loading the model:', error);
-    });
 
     // Set Camera Position
     camera.position.z = 5;
@@ -53,6 +60,26 @@
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // File Input Handler
+    const fileInput = document.getElementById('fileInput');
+    fileInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target.result;
+          try {
+            const loader = new THREE.ObjectLoader();
+            const object = loader.parse(JSON.parse(content));
+            scene.add(object);
+          } catch (error) {
+            console.error('Error parsing JSON model:', error);
+          }
+        };
+        reader.readAsText(file);
+      }
     });
   </script>
 </body>
