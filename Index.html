@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>RoadWorks</title>
   <style>
+    /* Your existing styles, unchanged */
     html, body {
       margin: 0;
       padding: 0;
@@ -34,7 +35,7 @@
       font-family: Arial, sans-serif;
       max-width: 400px;
       max-height: 300px;
-      overflow-y: auto; /* Enables vertical scrolling */
+      overflow-y: auto;
       z-index: 10;
     }
     #about-box h2 {
@@ -71,6 +72,18 @@
     .link-button:hover {
       background-color: #555;
     }
+    /* Style for showing the hotspot coordinates */
+    #hotspot-info {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+      font-family: Arial, sans-serif;
+      z-index: 20;
+    }
   </style>
   <link rel="icon" type="image/png" href="assets/favicon.png" />
 </head>
@@ -80,33 +93,18 @@
   <!-- About Box -->
   <div id="about-box">
     <h2>About Create: Roadworks</h2>
-    <p>Create: Roadworks is a Minecraft mod addon for the Create mod, themed around road construction, utility infrastructure, and hi-rail technology. Inspired by real-world construction and maintenance equipment, the goal of this project is to expand the Create experience with new mechanics and decorative elements that reflect industrial roadside work.</p>
-    <h3>Mod Features (Planned):</h3>
-    <ul>
-      <li>Hi-rail vehicles – Trucks and machinery that can drive on roads and rails</li>
-      <li>Road construction tools – Signs, cones, barriers, and equipment</li>
-      <li>Utility infrastructure – Functional and decorative blocks like cabinets, poles, and maintenance gear</li>
-      <li>New transport systems – Concepts for moving materials across mixed road-rail networks</li>
-    </ul>
-    <h3>Development Status:</h3>
-    <p>The project is in early development. While the base mod structure exists and several Blockbench models have been created, there are currently no implemented in-game features. Recent restructuring of the team means progress is temporarily paused while roles are refilled.</p>
-    <h3>Technical Info:</h3>
-    <ul>
-      <li>Built for Minecraft Java Edition</li>
-      <li>Designed for the Create mod (Forge/Fabric/Architectury support being explored)</li>
-      <li>Art style and modeling follow Create’s clean, semi-realistic industrial look</li>
-    </ul>
-    <h3>Future Goals:</h3>
-    <ul>
-      <li>Introduce working hi-rail vehicles using Create’s mechanics</li>
-      <li>Expand the set of construction-themed blocks and tools</li>
-      <li>Establish compatibility with major transport-related Create addons</li>
-    </ul>
-    <p>This mod is still in its foundational phase and is being developed as a passion project by the community. Updates and development progress will be shared on the official Discord server.</p>
+    <p>Create: Roadworks is a Minecraft mod addon for the Create mod, themed around road construction, utility infrastructure, and hi-rail technology. Inspired by real-world construction and maintenan[...]
+
     <div id="links">
       <a class="link-button" href="https://discord.gg/SfGeCvWasR" target="_blank">Discord</a>
       <a class="link-button" href="https://github.com/CreateModFan154/createmodfan154.github.io" target="_blank">GitHub</a>
     </div>
+  </div>
+
+  <!-- Hotspot Info -->
+  <div id="hotspot-info">
+    <p>Click anywhere to create a hotspot.</p>
+    <p>Saved Coordinates: <span id="saved-coords">None</span></p>
   </div>
 
   <!-- Three.js Script -->
@@ -122,15 +120,16 @@
     loader.setPath('Panorama/');
 
     // Updated texture order
-    const textureCube = loader.load([
+    const panoramaFiles = [
       'panorama_3.png', // right (switched with panorama_0.png)
       'panorama_1.png', // left
       'panorama_4.png', // top
       'panorama_5.png', // bottom
       'panorama_2.png', // front
       'panorama_0.png', // back (switched with panorama_3.png)
-    ]);
+    ];
 
+    const textureCube = loader.load(panoramaFiles);
     scene.background = textureCube;
 
     camera.position.z = 0.01;
@@ -140,13 +139,39 @@
       camera.rotation.y += 0.0007;
       renderer.render(scene, camera);
     }
-
     animate();
 
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Hotspot functionality
+    document.body.addEventListener('click', (event) => {
+      // Get the clicked coordinates
+      const x = event.clientX;
+      const y = event.clientY;
+
+      // Determine which panorama is active (mock logic for demonstration)
+      const panoramaIndex = Math.round((camera.rotation.y / (Math.PI * 2)) * panoramaFiles.length) % panoramaFiles.length;
+      const panoramaName = panoramaFiles[panoramaIndex];
+
+      // Save to localStorage
+      const hotspotData = { x, y, panorama: panoramaName };
+      localStorage.setItem('hotspot', JSON.stringify(hotspotData));
+
+      // Update the UI
+      document.getElementById('saved-coords').textContent = `X: ${x}, Y: ${y}, Panorama: ${panoramaName}`;
+      console.log('Hotspot saved:', hotspotData);
+    });
+
+    // Load saved hotspot on page load
+    window.addEventListener('load', () => {
+      const savedHotspot = JSON.parse(localStorage.getItem('hotspot'));
+      if (savedHotspot) {
+        document.getElementById('saved-coords').textContent = `X: ${savedHotspot.x}, Y: ${savedHotspot.y}, Panorama: ${savedHotspot.panorama}`;
+      }
     });
   </script>
 </body>
