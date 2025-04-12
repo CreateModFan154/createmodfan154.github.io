@@ -23,12 +23,91 @@
       font-family: monospace;
       z-index: 10;
     }
+    #about-box {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      border-radius: 10px;
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      z-index: 10;
+    }
+    #about-box h2 {
+      margin: 0 0 10px 0;
+      font-size: 18px;
+    }
+    #about-box p, #about-box ul {
+      margin: 5px 0;
+      font-size: 14px;
+      line-height: 1.4em;
+    }
+    #about-box ul {
+      padding-left: 20px;
+    }
+    #about-box a {
+      color: #00aaff;
+      text-decoration: none;
+    }
+    #links {
+      margin-top: 10px;
+    }
+    .link-button {
+      display: inline-block;
+      margin-right: 10px;
+      padding: 10px 15px;
+      font-size: 14px;
+      color: white;
+      background-color: #444;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .link-button:hover {
+      background-color: #555;
+    }
   </style>
   <link rel="icon" type="image/png" href="assets/favicon.png" />
 </head>
 <body>
   <div id="overlay">RoadWorks Create Addon</div>
 
+  <!-- About Box -->
+  <div id="about-box">
+    <h2>About Create: Roadworks</h2>
+    <p>Create: Roadworks is a Minecraft mod addon for the Create mod, themed around road construction, utility infrastructure, and hi-rail technology. Inspired by real-world construction and maintenance equipment, the goal of this project is to expand the Create experience with new mechanics and decorative elements that reflect industrial roadside work.</p>
+    <h3>Mod Features (Planned):</h3>
+    <ul>
+      <li>Hi-rail vehicles – Trucks and machinery that can drive on roads and rails</li>
+      <li>Road construction tools – Signs, cones, barriers, and equipment</li>
+      <li>Utility infrastructure – Functional and decorative blocks like cabinets, poles, and maintenance gear</li>
+      <li>New transport systems – Concepts for moving materials across mixed road-rail networks</li>
+    </ul>
+    <h3>Development Status:</h3>
+    <p>The project is in early development. While the base mod structure exists and several Blockbench models have been created, there are currently no implemented in-game features. Recent restructuring of the team means progress is temporarily paused while roles are refilled.</p>
+    <h3>Technical Info:</h3>
+    <ul>
+      <li>Built for Minecraft Java Edition</li>
+      <li>Designed for the Create mod (Forge/Fabric/Architectury support being explored)</li>
+      <li>Art style and modeling follow Create’s clean, semi-realistic industrial look</li>
+    </ul>
+    <h3>Future Goals:</h3>
+    <ul>
+      <li>Introduce working hi-rail vehicles using Create’s mechanics</li>
+      <li>Expand the set of construction-themed blocks and tools</li>
+      <li>Establish compatibility with major transport-related Create addons</li>
+    </ul>
+    <p>This mod is still in its foundational phase and is being developed as a passion project by the community. Updates and development progress will be shared on the official Discord server.</p>
+    <div id="links">
+      <a class="link-button" href="https://discord.gg/SfGeCvWasR" target="_blank">Discord</a>
+      <a class="link-button" href="https://github.com/CreateModFan154/createmodfan154.github.io" target="_blank">GitHub</a>
+    </div>
+  </div>
+
+  <!-- Three.js Script -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
   <script>
     const scene = new THREE.Scene();
