@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Panorama Viewer</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      background-color: black;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    #overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: white;
+      padding: 20px;
+      font-family: monospace;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div id="overlay">Use arrow keys to explore the panorama.</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script>
+    // Scene, Camera, Renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1100);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Load Cube Texture for Panorama
+    const loader = new THREE.CubeTextureLoader();
+    loader.setPath('Panorama/');
+
+    const textureCube = loader.load([
+      'panorama_0.png', // right
+      'panorama_1.png', // left
+      'panorama_4.png', // top
+      'panorama_5.png', // bottom
+      'panorama_2.png', // front
+      'panorama_3.png', // back
+    ]);
+
+    scene.background = textureCube;
+
+    // Camera Position
+    camera.position.z = 0.01;
+
+    // Arrow Keys Control
+    const rotationSpeed = 0.01; // Adjust rotation speed as needed
+    let rotationY = 0;
+    let rotationX = 0;
+
+    document.addEventListener('keydown', (event) => {
+      switch (event.key) {
+        case 'ArrowUp':    // Tilt up
+          rotationX += rotationSpeed;
+          break;
+        case 'ArrowDown':  // Tilt down
+          rotationX -= rotationSpeed;
+          break;
+        case 'ArrowLeft':  // Rotate left
+          rotationY += rotationSpeed;
+          break;
+        case 'ArrowRight': // Rotate right
+          rotationY -= rotationSpeed;
+          break;
+      }
+    });
+
+    // Animation Loop
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Apply rotations to the camera
+      camera.rotation.y = rotationY;
+      camera.rotation.x = rotationX;
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // Handle Window Resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
