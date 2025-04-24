@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClassroomScreen Alternative</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+    #panorama {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    #controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 10;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    #controls button {
+      display: block;
+      margin: 5px 0;
+      padding: 8px 10px;
+      border: none;
+      background-color: #444;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #controls button:hover {
+      background-color: #555;
+    }
+    #widget-container {
+      position: absolute;
+      top: 80px;
+      left: 10px;
+      z-index: 10;
+      max-width: 300px;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      overflow-y: auto;
+      max-height: 80%;
+    }
+    .widget {
+      margin-bottom: 15px;
+    }
+    .widget h3 {
+      margin: 0 0 5px 0;
+    }
+    .widget textarea, .widget input {
+      width: 100%;
+      padding: 5px;
+      border: none;
+      border-radius: 5px;
+    }
+    #canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 5;
+    }
+  </style>
+</head>
+<body>
+  <div id="panorama"></div>
+  <canvas id="canvas"></canvas>
+  <div id="controls">
+    <button onclick="addWidget('timer')">Add Timer</button>
+    <button onclick="addWidget('note')">Add Note</button>
+    <button onclick="addWidget('todo')">Add To-Do List</button>
+    <button onclick="addWidget('drawing')">Enable Drawing</button>
+  </div>
+  <div id="widget-container"></div>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script>
+    // Panorama setup
+    const panoramaDiv = document.getElementById('panorama');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1100);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    panoramaDiv.appendChild(renderer.domElement);
+
+    const loader = new THREE.CubeTextureLoader();
+    loader.setPath('Panorama/');
+
+    const panoramaFiles = [
+      'panorama_3.png', // right
+      'panorama_1.png', // left
+      'panorama_4.png', // top
+      'panorama_5.png', // bottom
+      'panorama_2.png', // front
+      'panorama_0.png', // back
+    ];
+
+    const textureCube = loader.load(panoramaFiles);
+    scene.background = textureCube;
+
+    camera.position.z = 0.01;
+
+    function animate() {
+      requestAnimationFrame(animate);
+      camera.rotation.y += 0.0007;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Widgets
+    const widgetContainer = document.getElementById('widget-container');
+
+    function addWidget(type) {
+      const widget = document.createElement('div');
+      widget.classList.add('widget');
+      switch (type) {
+        case 'timer':
+          widget.innerHTML = `
+            <h3>Timer</h3>
+            <button onclick="startTimer(this)">Start</button>
+            <span>00:00</span>
+          `;
+          break;
+        case 'note':
+          widget.innerHTML = `
+            <h3>Note</h3>
+            <textarea placeholder="Write your note here..."></textarea>
+          `;
+          break;
+        case 'todo':
+          widget.innerHTML = `
+            <h3>To-Do List</h3>
+            <input type="text" placeholder="Add a task" onkeypress="addTask(event, this)" />
+            <ul></ul>
+          `;
+          break;
+        case 'drawing':
+          enableDrawing();
+          return;
+      }
+      widgetContainer.appendChild(widget);
+    }
+
+    // Timer functionality
+    function startTimer(button) {
+      const span = button.nextElementSibling;
+      let time = 0;
+      setInterval(() => {
+        time++;
+        const minutes = Math.floor(time / 60).toString().padStart(2, '0');
+        const seconds = (time % 60).toString().padStart(2, '0');
+        span.textContent = `${minutes}:${seconds}`;
+      }, 1000);
+    }
+
+    // To-Do List functionality
+    function addTask(event, input) {
+      if (event.key === 'Enter' && input.value.trim() !== '') {
+        const ul = input.nextElementSibling;
+        const li = document.createElement('li');
+        li.textContent = input.value;
+        li.onclick = () => li.remove();
+        ul.appendChild(li);
+        input.value = '';
+      }
+    }
+
+    // Drawing functionality
+    function enableDrawing() {
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      let isDrawing = false;
+
+      canvas.addEventListener('mousedown', () => isDrawing = true);
+      canvas.addEventListener('mouseup', () => isDrawing = false);
+      canvas.addEventListener('mousemove', (e) => {
+        if (isDrawing) {
+          ctx.fillStyle = 'red';
+          ctx.beginPath();
+          ctx.arc(e.clientX, e.clientY, 5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      });
+    }
+  </script>
+</body>
+</html>
