@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blacklist/Whitelist Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .list-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .list-section {
+      width: 45%;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      padding: 5px 10px;
+      margin: 5px 0;
+      background: #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+    }
+    button {
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Blacklist/Whitelist Manager</h1>
+  <div>
+    <input type="text" id="itemInput" placeholder="Enter item" />
+    <button onclick="addToList('blacklist')">Add to Blacklist</button>
+    <button onclick="addToList('whitelist')">Add to Whitelist</button>
+  </div>
+  <div class="list-container">
+    <div class="list-section">
+      <h2>Blacklist</h2>
+      <ul id="blacklist"></ul>
+    </div>
+    <div class="list-section">
+      <h2>Whitelist</h2>
+      <ul id="whitelist"></ul>
+    </div>
+  </div>
+  <script>
+    // Fetch the JSON (mock data for now)
+    let data = {
+      blacklist: [],
+      whitelist: []
+    };
+
+    // Function to render the lists
+    function renderList(type) {
+      const listElement = document.getElementById(type);
+      listElement.innerHTML = '';
+      data[type].forEach((item, index) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = item;
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove';
+        removeButton.onclick = () => removeFromList(type, index);
+        listItem.appendChild(removeButton);
+        listElement.appendChild(listItem);
+      });
+    }
+
+    // Function to add an item to the list
+    function addToList(type) {
+      const input = document.getElementById('itemInput');
+      const value = input.value.trim();
+      if (value) {
+        data[type].push(value);
+        input.value = '';
+        renderList(type);
+      }
+    }
+
+    // Function to remove an item from the list
+    function removeFromList(type, index) {
+      data[type].splice(index, 1);
+      renderList(type);
+    }
+
+    // Initial rendering
+    renderList('blacklist');
+    renderList('whitelist');
+  </script>
+</body>
+</html>
