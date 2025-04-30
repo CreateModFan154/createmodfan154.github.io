@@ -43,6 +43,7 @@
     <input type="text" id="itemInput" placeholder="Enter item" />
     <button onclick="addToList('blacklist')">Add to Blacklist</button>
     <button onclick="addToList('whitelist')">Add to Whitelist</button>
+    <button onclick="saveToGitHub()">Save Changes</button>
   </div>
   <div class="list-container">
     <div class="list-section">
@@ -55,11 +56,72 @@
     </div>
   </div>
   <script>
-    // Fetch the JSON (mock data for now)
+    const GITHUB_USERNAME = "CreateModFan154";
+    const REPO_NAME = "createmodfan154.github.io";
+    const FILE_PATH = "blacklist_whitelist.json";
+    const BRANCH = "main";
+
+    // Encoded token (Base64 encoded for simplicity)
+    const ENCODED_TOKEN = "eW91cl9wZXJzb25hbF9hY2Nlc3NfdG9rZW4="; // Replace with your actual Base64-encoded PAT
+
     let data = {
       blacklist: [],
       whitelist: []
     };
+    let fileSha = ""; // To store the SHA of the JSON file
+
+    // Decode the token
+    function decodeToken(encodedToken) {
+      return atob(encodedToken); // Decodes Base64-encoded string
+    }
+
+    // Fetch the JSON file from GitHub
+    async function fetchFromGitHub() {
+      try {
+        const token = decodeToken(ENCODED_TOKEN);
+        const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}?ref=${BRANCH}`, {
+          headers: {
+            Authorization: `token ${token}`
+          }
+        });
+        if (!response.ok) throw new Error("Failed to fetch JSON file");
+        const fileData = await response.json();
+        const content = atob(fileData.content); // Decode Base64 content
+        data = JSON.parse(content);
+        fileSha = fileData.sha; // Store the SHA for updates
+        renderList('blacklist');
+        renderList('whitelist');
+      } catch (error) {
+        console.error("Error fetching JSON file:", error);
+        alert("Could not load data. Please check your connection and token.");
+      }
+    }
+
+    // Save the updated JSON file to GitHub
+    async function saveToGitHub() {
+      try {
+        const token = decodeToken(ENCODED_TOKEN);
+        const updatedContent = btoa(JSON.stringify(data, null, 2)); // Encode content to Base64
+        const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}`, {
+          method: "PUT",
+          headers: {
+            Authorization: `token ${token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: "Update blacklist/whitelist",
+            content: updatedContent,
+            sha: fileSha,
+            branch: BRANCH
+          })
+        });
+        if (!response.ok) throw new Error("Failed to save JSON file");
+        alert("Changes saved to GitHub!");
+      } catch (error) {
+        console.error("Error saving JSON file:", error);
+        alert("Could not save changes. Please check your connection and token.");
+      }
+    }
 
     // Function to render the lists
     function renderList(type) {
@@ -93,9 +155,8 @@
       renderList(type);
     }
 
-    // Initial rendering
-    renderList('blacklist');
-    renderList('whitelist');
+    // Initial fetch
+    fetchFromGitHub();
   </script>
 </body>
 </html>
