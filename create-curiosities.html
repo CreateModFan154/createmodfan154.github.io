@@ -1,101 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Create Curiosities: The Museum Modpack</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 2rem;
-      background-color: #f9f9f9;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
       color: #333;
     }
-    h1 {
-      color: #4b2e83;
+
+    header {
+      background-color: #d6b96f;
+      color: #222;
+      padding: 2rem 1rem;
       text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-    p.description {
-      max-width: 700px;
-      margin: 0 auto 2rem auto;
-      font-size: 1.1rem;
-      text-align: center;
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
     }
+
+    header p {
+      margin: 0.5rem 0 0;
+      font-size: 1.2rem;
+      font-style: italic;
+    }
+
+    main {
+      padding: 2rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #d6b96f;
+      padding-bottom: 0.3rem;
+    }
+
     ul {
       list-style: none;
       padding-left: 0;
     }
+
     li {
+      background: #ffffff;
+      padding: 0.8rem 1rem;
       margin-bottom: 0.5rem;
+      border-left: 5px solid #d6b96f;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: background 0.2s;
     }
+
+    li:hover {
+      background: #fdf8e3;
+    }
+
     a {
       text-decoration: none;
-      color: #2a6496;
+      color: #4a3e2c;
+      font-weight: bold;
     }
+
     a:hover {
       text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #777;
     }
   </style>
 </head>
 <body>
-  <h1>Create Curiosities: The Museum Modpack</h1>
-  <p class="description">
-    A carefully curated Create-focused modpack designed to bring immersive museum exhibits, historical mechanics, and aesthetic engineering to life in Minecraft.
-  </p>
+  <header>
+    <h1>Create Curiosities</h1>
+    <p>The Museum Modpack – A whimsical blend of Create & creativity</p>
+  </header>
 
-  <h2>Mod List</h2>
-  <ul>
-    <!-- Paste your mod list here -->
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/create">Create (by simibubi)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/watermedia">WATERMeDIA: Multimedia API (by SrRapero720)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/create-smart-crafter">Create: Smart Crafter (by Tatnux)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/stitch">Stitch (formerly Athena) (by CodexAdrian)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/createaddition">Create Crafts & Additions (by MRHminer)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/create-additional-lights">Create: Additional Lights (by MrCyberdragon)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/moa-decor-cookery">MOA DECOR: COOKERY (by moa666creator)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/auudio-forge">Auudio [Forge] (by Keksuccino)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/texture-packs/create-vault-chest">CREATE - VAULT CHEST (by daxz_nort)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/texture-packs/create-style-hud">Create Style HUD (by ogabasferr)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/create-misc-and-things">Create : Misc & Things [update 6 ✓] (by To0pa)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/open-parties-and-claims">Open Parties and Claims (by xaero96)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/create-let-the-adventure-begin">Create: Let The Adventure Begin (by Not_Juno)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/texture-packs/create-new-age-retexture">Create: New Age Retexture (by sheslong)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/quark">Quark (by Vazkii)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/rechiseled">Rechiseled (by SuperMartijn642)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/framedblocks">FramedBlocks (by XFactHD)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/create-tank-defenses">Create: Tank Defenses (by ItsRuby05)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/create-stuff-additions">Create Stuff 'N Additions (by Furti_Two)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/create-deco">Create Deco (by talrey)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/selene">Moonlight Lib (by MehVahdJukaar)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/konkrete">Konkrete [Forge/NeoForge] (by Keksuccino)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/playeranimator">playerAnimator (by KosmX)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/create-framed">Create: Framed (by DakotaPrideModding)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/kubejs">KubeJS (by LatvianModder)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/ponder">Ponder for KubeJS (by Lytho)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/create-better-motors">Create: Better Motors (by Reggarf)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/melody">Melody (by Keksuccino)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/texture-packs/create-better-copper">Create Better Copper (by shrimpLiquid)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/texture-packs/create-touch-ups">Create Touch-Ups (by Spydnel)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/kubejs-create">KubeJS Create (by LatvianModder)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/create-designed-decor">Create: Designed Decor (by CreateModFan154)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/moa-decor-garden">MOA DECOR: GARDEN (by moa666creator)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/garnished">Create: Garnished (by DakotaPrideModding)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/texture-packs/create-sophisticated-backpacks">Create Style Sophisticated Backpacks (by Luna)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/botarium">Botarium (by CodexAdrian)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/amendments">Amendments (by plantspookable)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/supermartijn642s-core-lib">SuperMartijn642's Core Lib (by SuperMartijn642)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/ftb-library-forge">FTB Library (Forge) (by FTB)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/texture-packs/stay-true">Stay True (by haimcyfly)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/moa-decor-art">MOA DECOR: ART (by moa666creator)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/decorative-blocks">Decorative Blocks (by stohun)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/createutilities">Create Utilities (Fabric/Forge) (by duquee___)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/waterframes">WATERFrAMES: Multimedia Displays (by SrRapero720)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/drippy-loading-screen">Drippy Loading Screen (by Keksuccino)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/balm">Balm (by BlayTheNinth)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/moa-decor-lights">MOA DECOR: LIGHTS (by moa666creator)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/sinytra-connector">Sinytra Connector (by Su5eD)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/numismatics">Create: Numismatics (by IThundxr)</a></li>
-    <li><a href="https://www.curseforge.com/minecraft/mc-mods/petrolpark-library">Petrolpark Library (by Petrolpark)</a></li>
-  </ul>
+  <main>
+    <h2>Mod List</h2>
+    <ul>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create">Create (by simibubi)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/watermedia">WATERMeDIA: Multimedia API (by SrRapero720)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-smart-crafter">Create: Smart Crafter (by Tatnux)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/stitch">Stitch (formerly Athena) (by CodexAdrian)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/createaddition">Create Crafts & Additions (by MRHminer)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-additional-lights">Create: Additional Lights (by MrCyberdragon)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/moa-decor-cookery">MOA DECOR: COOKERY (by moa666creator)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/auudio-forge">Auudio [Forge] (by Keksuccino)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/texture-packs/create-vault-chest">CREATE - VAULT CHEST (by daxz_nort)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/texture-packs/create-style-hud">Create Style HUD (by ogabasferr)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-misc-and-things">Create : Misc & Things [update 6 ✓] (by To0pa)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/open-parties-and-claims">Open Parties and Claims (by xaero96)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-let-the-adventure-begin">Create: Let The Adventure Begin (by Not_Juno)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/texture-packs/create-new-age-retexture">Create: New Age Retexture (by sheslong)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/quark">Quark (by Vazkii)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/rechiseled">Rechiseled (by SuperMartijn642)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/framedblocks">FramedBlocks (by XFactHD)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-tank-defenses">Create: Tank Defenses (by ItsRuby05)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-stuff-additions">Create Stuff 'N Additions (by Furti_Two)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-deco">Create Deco (by talrey)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/selene">Moonlight Lib (by MehVahdJukaar)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/konkrete">Konkrete [Forge/NeoForge] (by Keksuccino)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/playeranimator">playerAnimator (by KosmX)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-framed">Create: Framed (by DakotaPrideModding)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/kubejs">KubeJS (by LatvianModder)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/ponder">Ponder for KubeJS (by Lytho)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-better-motors">Create: Better Motors (by Reggarf)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/melody">Melody (by Keksuccino)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/texture-packs/create-better-copper">Create Better Copper (by shrimpLiquid)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/texture-packs/create-touch-ups">Create Touch-Ups (by Spydnel)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/kubejs-create">KubeJS Create (by LatvianModder)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-designed-decor">Create: Designed Decor (by CreateModFan154)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/moa-decor-garden">MOA DECOR: GARDEN (by moa666creator)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/garnished">Create: Garnished (by DakotaPrideModding)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/texture-packs/create-sophisticated-backpacks">Create Style Sophisticated Backpacks (by Luna)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/botarium">Botarium (by CodexAdrian)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/amendments">Amendments (by plantspookable)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/supermartijn642s-core-lib">SuperMartijn642's Core Lib (by SuperMartijn642)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/ftb-library-forge">FTB Library (Forge) (by FTB)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/texture-packs/stay-true">Stay True (by haimcyfly)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/moa-decor-art">MOA DECOR: ART (by moa666creator)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/decorative-blocks">Decorative Blocks (by stohun)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/createutilities">Create Utilities (Fabric/Forge) (by duquee___)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/waterframes">WATERFrAMES: Multimedia Displays (by SrRapero720)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/drippy-loading-screen">Drippy Loading Screen (by Keksuccino)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/balm">Balm (by BlayTheNinth)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/moa-decor-lights">MOA DECOR: LIGHTS (by moa666creator)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/sinytra-connector">Sinytra Connector (by Su5eD)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/numismatics">Create: Numismatics (by IThundxr)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/petrolpark-library">Petrolpark Library (by Petrolpark)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/supermartijn642s-config-lib">SuperMartijn642's Config Lib (by SuperMartijn642)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/moa-decor-bath">MOA DECOR: BATH (by moa666creator)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/ftb-ultimine-forge">FTB Ultimine (Forge) (by FTB)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/xaeros-minimap">Xaero's Minimap (by xaero96)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/petrols-parts">Petrol's Parts (Create add-on) (by Petrolpark)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/moa-decor-electronics">MOA DECOR: ELECTRONICS (by moa666creator)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/resourceful-lib">Resourceful Lib (by ThatGravyBoat)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/moa-decor-toys">MOA DECOR: TOYS (by moa666creator)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-connected">Create: Connected (by Lysine)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/displaycase">Display Case (by ChappiePie)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/sinytra-connector-extras-with-vs2-support-rea">Sinytra Connector Extras with VS2 Support (REA/reach_entity_attributes fix) (by PhoenixLimited)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/etched">Etched (by jackson)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/corpse-x-curios-api-compat">Corpse x Curios API Compat (by Project8gbDeRam)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/supplementaries-squared">Supplementaries Squared (by plantspookable)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-easy-structures">Create: Easy Structures (by M_Productions)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/essential-mod">Essential Mod (by SparkUniverse_)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/supplementaries">Supplementaries (by MehVahdJukaar)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/jei">Just Enough Items (JEI) (by mezz)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/moa-decor-science">MOA DECOR: SCIENCE (by moa666creator)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-big-contraptions">Create: Big Contraptions (by MuriPlz)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/architectury-api">Architectury API (by shedaniel)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-chromaticreturn">Create Chromatic Return (by phicctv)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/zeta">Zeta (by Vazkii)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-enchantment-industry">Create: Enchantment Industry (by DragonsPlus)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/curios">Curios API (Forge/NeoForge) (by TheIllusiveC4)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/corpse">Corpse (by henkelmax)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/waystones">Waystones (by BlayTheNinth)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/creativecore">CreativeCore (by CreativeMD)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/fxnt-bitsnbobs">FXNT BitsNBobs (by foxynotail)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/ftb-teams-forge">FTB Teams (Forge) (by FTB)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/fusion-connected-textures">Fusion (Connected Textures) (by SuperMartijn642)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/rhino">Rhino (by LatvianModder)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-industry">Create: The Factory Must Grow (by Dr_Mango_Tea)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/moa-decor-holidays">MOA DECOR: HOLIDAYS (by moa666creator)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/another-flashlight-mod">Another Flashlight Mod (by Axolti)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/texture-packs/create-style-hopper">Create Style Hopper (by moromorochan)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-new-age">Create: New Age (by nullBlade)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/texture-packs/create-cuprum">Create: Cuprum (by Ethrtn)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/fancymenu">FancyMenu (by Keksuccino)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-the-air-war">Create: The Air War (by sonima)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/copycats">Create: Copycats+ (by Lysine)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-logistics">Create Logistics (by Furti_Two)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-totem-factory">Create: Totem Factory (by MYR)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-cobblestone">Create Cobblestone (by MR_sticky_piston)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-sifting">Create Sifting (by oierbravo)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-curios-jetpack">Create: Curios Jetpack & Backtank [Forge/Fabric/NeoForge] (by robinfrt)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/forgified-fabric-api">Forgified Fabric API (by Su5eD)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/chipped">Chipped (by terrariumearth)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/create-ore-excavation">Create Ore Excavation (by tom54541)</a></li>
+<li><a href="https://www.curseforge.com/minecraft/mc-mods/ftb-quests-forge">FTB Quests (Forge) (by FTB)</a></li>
+</ul>
+
+  </main>
+
+  <footer>
+    © 2025 Create Curiosities Modpack. Made with <span style="color: #d6b96f;">♥</span> for builders, tinkerers, and dreamers.
+  </footer>
 </body>
 </html>
