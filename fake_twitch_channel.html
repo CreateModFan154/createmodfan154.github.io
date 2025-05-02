@@ -20,6 +20,24 @@
         .header h1 {
             margin: 0;
         }
+        .banner-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px;
+        }
+        .banner-container img {
+            width: 90%;
+            max-width: 1200px;
+            border-radius: 10px;
+        }
+        .upload-banner {
+            text-align: center;
+            margin: 20px;
+        }
+        .upload-banner input {
+            margin-top: 10px;
+        }
         .profile {
             text-align: center;
             margin: 20px;
@@ -59,11 +77,22 @@
     <div class="header">
         <h1>Fake Twitch Channel</h1>
     </div>
+    
+    <div class="banner-container" id="bannerContainer">
+        <img id="bannerImage" src="https://via.placeholder.com/1200x300" alt="Channel Banner">
+    </div>
+    
+    <div class="upload-banner">
+        <h3>Upload Banner</h3>
+        <input type="file" id="bannerUpload" accept="image/*">
+    </div>
+    
     <div class="profile">
         <img src="https://via.placeholder.com/150" alt="Profile Picture">
         <h2>Streamer Name</h2>
         <p>Just Chatting | 1.2K viewers</p>
     </div>
+    
     <div class="live-stream">
         <h3>Live Stream</h3>
         <video controls>
@@ -71,8 +100,26 @@
             Your browser does not support the video tag.
         </video>
     </div>
+    
     <div class="footer">
         <p>© 2025 Fake Twitch Channel. All rights reserved.</p>
     </div>
+
+    <script>
+        // JavaScript to handle banner upload and display
+        const bannerUpload = document.getElementById('bannerUpload');
+        const bannerImage = document.getElementById('bannerImage');
+
+        bannerUpload.addEventListener('change', function(event) {
+            const file = event.target.files[0]; // Get the selected file
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    bannerImage.src = e.target.result; // Set the uploaded image as the banner
+                };
+                reader.readAsDataURL(file); // Read the file as a data URL
+            }
+        });
+    </script>
 </body>
 </html>
