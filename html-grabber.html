@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time HTML Scanner</title>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        video {
+            display: block;
+            width: 100%;
+            max-height: 300px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-top: 20px;
+        }
+        #output {
+            white-space: pre-wrap;
+            background: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ccc;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Real-Time HTML Scanner</h1>
+    <p>This tool will scan and extract visible HTML/text content from the shared screen in real time.</p>
+    <button id="startSharing">Start Sharing Screen</button>
+    <video id="sharedVideo" autoplay muted playsinline></video>
+    <textarea id="output" readonly placeholder="Extracted content will appear here..."></textarea>
+
+    <script>
+        const startSharingButton = document.getElementById('startSharing');
+        const videoElement = document.getElementById('sharedVideo');
+        const outputTextarea = document.getElementById('output');
+        let stream;
+
+        // Function to start screen sharing
+        startSharingButton.addEventListener('click', async () => {
+            try {
+                // Request the screen or tab to be shared
+                stream = await navigator.mediaDevices.getDisplayMedia({
+                    video: { cursor: "always" },
+                    audio: false
+                });
+
+                // Attach the shared screen to the video element
+                videoElement.srcObject = stream;
+
+                // Start scanning frames in real time
+                scanFrames();
+            } catch (error) {
+                console.error("Error accessing screen sharing:", error);
+                alert("Failed to access screen sharing. Please try again.");
+            }
+        });
+
+        // Function to scan frames from the shared screen
+        async function scanFrames() {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+
+            // Process frames continuously
+            const processFrame = async () => {
+                try {
+                    // Set canvas size to match video size
+                    canvas.width = videoElement.videoWidth;
+                    canvas.height = videoElement.videoHeight;
+
+                    // Draw the current video frame onto the canvas
+                    context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+                    // Convert the canvas content to an image
+                    const imageData = canvas.toDataURL("image/png");
+
+                    // Use Tesseract.js to extract text from the image
+                    const result = await Tesseract.recognize(imageData, 'eng', {
+                        logger: info => console.log(info) // Optional: Log OCR progress
+                    });
+
+                    // Update the output with the extracted text
+                    outputTextarea.value = result.data.text;
+                } catch (error) {
+                    console.error("Error processing frame:", error);
+                } finally {
+                    // Continue processing the next frame
+                    requestAnimationFrame(processFrame);
+                }
+            };
+
+            // Start processing frames
+            processFrame();
+        }
+    </script>
+</body>
+</html>
