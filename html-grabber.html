@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-Time HTML Scanner</title>
+    <title>HTML Code Extractor</title>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
     <style>
         body {
@@ -32,11 +32,11 @@
     </style>
 </head>
 <body>
-    <h1>Real-Time HTML Scanner</h1>
-    <p>This tool will scan and extract visible HTML/text content from the shared screen in real time.</p>
+    <h1>Right-Side HTML Scanner</h1>
+    <p>This tool scans the right side of the shared screen for HTML code and attempts to complete cut-off code using context from the left side.</p>
     <button id="startSharing">Start Sharing Screen</button>
     <video id="sharedVideo" autoplay muted playsinline></video>
-    <textarea id="output" readonly placeholder="Extracted content will appear here..."></textarea>
+    <textarea id="output" readonly placeholder="Extracted HTML content will appear here..."></textarea>
 
     <script>
         const startSharingButton = document.getElementById('startSharing');
@@ -44,7 +44,7 @@
         const outputTextarea = document.getElementById('output');
         let stream;
 
-        // Function to start screen sharing
+        // Start screen sharing
         startSharingButton.addEventListener('click', async () => {
             try {
                 // Request the screen or tab to be shared
@@ -69,26 +69,38 @@
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
 
-            // Process frames continuously
+            // Function to process each frame
             const processFrame = async () => {
                 try {
                     // Set canvas size to match video size
-                    canvas.width = videoElement.videoWidth;
-                    canvas.height = videoElement.videoHeight;
+                    const videoWidth = videoElement.videoWidth;
+                    const videoHeight = videoElement.videoHeight;
 
-                    // Draw the current video frame onto the canvas
-                    context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+                    if (!videoWidth || !videoHeight) {
+                        requestAnimationFrame(processFrame);
+                        return;
+                    }
+
+                    canvas.width = videoWidth / 2; // Only half the width (right side)
+                    canvas.height = videoHeight;
+
+                    // Draw the right half of the video frame onto the canvas
+                    context.drawImage(videoElement, videoWidth / 2, 0, videoWidth / 2, videoHeight, 0, 0, canvas.width, canvas.height);
 
                     // Convert the canvas content to an image
                     const imageData = canvas.toDataURL("image/png");
 
-                    // Use Tesseract.js to extract text from the image
+                    // Use Tesseract.js to extract text from the cropped image
                     const result = await Tesseract.recognize(imageData, 'eng', {
-                        logger: info => console.log(info) // Optional: Log OCR progress
+                        logger: info => console.log(info) // Log OCR progress
                     });
 
-                    // Update the output with the extracted text
-                    outputTextarea.value = result.data.text;
+                    // Process the extracted text to filter and complete HTML code
+                    const rawText = result.data.text;
+                    const completedHTML = completeHTML(rawText);
+
+                    // Update the output textarea
+                    outputTextarea.value = completedHTML;
                 } catch (error) {
                     console.error("Error processing frame:", error);
                 } finally {
@@ -99,6 +111,49 @@
 
             // Start processing frames
             processFrame();
+        }
+
+        // Function to complete cut-off HTML code
+        function completeHTML(rawText) {
+            const lines = rawText.split('\n');
+            const completedLines = [];
+            const tagStack = [];
+
+            for (let line of lines) {
+                line = line.trim();
+
+                // Skip empty lines
+                if (!line) continue;
+
+                // Check for opening and closing HTML tags
+                const openingTags = [...line.matchAll(/<([a-zA-Z0-9-]+)(\s[^>]*)?>/g)];
+                const closingTags = [...line.matchAll(/<\/([a-zA-Z0-9-]+)>/g)];
+
+                // Process opening tags
+                for (const match of openingTags) {
+                    const tagName = match[1];
+                    tagStack.push(tagName); // Add to stack
+                }
+
+                // Process closing tags
+                for (const match of closingTags) {
+                    const tagName = match[1];
+                    const stackIndex = tagStack.lastIndexOf(tagName);
+                    if (stackIndex !== -1) {
+                        tagStack.splice(stackIndex, 1); // Remove matched tag from stack
+                    }
+                }
+
+                completedLines.push(line);
+            }
+
+            // Complete any unclosed tags
+            while (tagStack.length > 0) {
+                const unclosedTag = tagStack.pop();
+                completedLines.push(`</${unclosedTag}>`);
+            }
+
+            return completedLines.join('\n');
         }
     </script>
 </body>
