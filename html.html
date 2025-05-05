@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Webpage Content</title>
+</head>
+<body>
+    <h1>Fetch Webpage Content</h1>
+    <form id="fetchForm">
+        <label for="urlInput">Enter URL:</label>
+        <input type="text" id="urlInput" placeholder="https://example.com" required>
+        <button type="submit">Fetch Content</button>
+    </form>
+    <h2>Output:</h2>
+    <div id="output" style="white-space: pre-wrap; border: 1px solid #ccc; padding: 10px; max-height: 400px; overflow: auto;"></div>
+
+    <script>
+        const form = document.getElementById('fetchForm');
+        const output = document.getElementById('output');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const url = document.getElementById('urlInput').value;
+
+            try {
+                // Fetch the HTML content
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const htmlContent = await response.text();
+
+                // Display the fetched HTML content
+                output.textContent = htmlContent;
+            } catch (error) {
+                console.error('Error fetching the webpage:', error);
+                output.textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
