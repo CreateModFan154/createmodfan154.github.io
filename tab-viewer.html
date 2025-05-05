@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shared Tab and Multi-Tab Viewer</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .screen-container, .tab-container {
+      margin: 20px 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    video {
+      width: 90%;
+      max-width: 800px;
+      border: 2px solid #000;
+    }
+    iframe {
+      width: 45%;
+      height: 400px;
+      border: 1px solid #ccc;
+    }
+    #url-input {
+      width: 300px;
+      padding: 5px;
+      margin-right: 5px;
+    }
+    button {
+      padding: 5px 10px;
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Shared Tab and Multi-Tab Viewer</h1>
+
+  <!-- Screen Sharing Section -->
+  <div>
+    <button onclick="startSharing()">Start Sharing Tab</button>
+    <button onclick="stopSharing()">Stop Sharing</button>
+  </div>
+  <div class="screen-container">
+    <video id="shared-video" autoplay playsinline></video>
+  </div>
+
+  <!-- Multi-Tab Section -->
+  <div>
+    <input id="url-input" type="url" placeholder="Enter a URL to add" />
+    <button onclick="addTab()">Add Tab</button>
+  </div>
+  <div class="tab-container" id="tab-container">
+    <!-- Iframes will be dynamically added here -->
+  </div>
+
+  <script>
+    let sharedStream = null;
+
+    // Function to start screen sharing
+    async function startSharing() {
+      try {
+        sharedStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+        const videoElement = document.getElementById('shared-video');
+        videoElement.srcObject = sharedStream;
+      } catch (error) {
+        console.error('Error starting screen sharing:', error);
+        alert('Failed to share the screen. Please ensure you have granted permissions.');
+      }
+    }
+
+    // Function to stop screen sharing
+    function stopSharing() {
+      if (sharedStream) {
+        const tracks = sharedStream.getTracks();
+        tracks.forEach(track => track.stop());
+        sharedStream = null;
+        const videoElement = document.getElementById('shared-video');
+        videoElement.srcObject = null;
+      }
+    }
+
+    // Function to add a new tab (iframe)
+    function addTab() {
+      const urlInput = document.getElementById('url-input');
+      const url = urlInput.value;
+      if (url) {
+        const iframe = document.createElement('iframe');
+        iframe.src = url;
+        document.getElementById('tab-container').appendChild(iframe);
+        urlInput.value = '';
+      } else {
+        alert('Please enter a valid URL.');
+      }
+    }
+  </script>
+</body>
+</html>
