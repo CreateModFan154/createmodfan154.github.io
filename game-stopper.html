@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screen Sharing & Game Detection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #282c34;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #61dafb;
+            padding: 1rem;
+        }
+        header h1 {
+            margin: 0;
+        }
+        main {
+            padding: 2rem;
+        }
+        button {
+            background-color: #61dafb;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            color: #282c34;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #21a1f1;
+        }
+        video {
+            margin-top: 2rem;
+            max-width: 80%;
+            border: 2px solid #61dafb;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Screen Sharing & Game Detection</h1>
+    </header>
+    <main>
+        <p>Click the button below to share your screen.</p>
+        <button id="share-screen-button">Share Screen</button>
+        <video id="screen-video" autoplay muted></video>
+        <p id="status-message"></p>
+    </main>
+
+    <script>
+        const shareScreenButton = document.getElementById('share-screen-button');
+        const screenVideo = document.getElementById('screen-video');
+        const statusMessage = document.getElementById('status-message');
+        let reloadInterval;
+
+        shareScreenButton.addEventListener('click', async () => {
+            try {
+                // Request screen sharing
+                const stream = await navigator.mediaDevices.getDisplayMedia({
+                    video: true
+                });
+                screenVideo.srcObject = stream;
+
+                // Start monitoring the screen for "game" keywords
+                monitorScreenForGames();
+
+                statusMessage.textContent = "Screen sharing started. Monitoring for games...";
+            } catch (error) {
+                console.error("Error sharing screen:", error);
+                statusMessage.textContent = "Failed to start screen sharing. Please try again.";
+            }
+        });
+
+        function monitorScreenForGames() {
+            clearInterval(reloadInterval); // Clear any existing intervals
+            reloadInterval = setInterval(() => {
+                // Simulate detection of "game" content
+                // In a real-world scenario, you might use OCR or other detection logic
+                const randomDetection = Math.random() < 0.2; // Simulated 20% chance of detecting "game"
+
+                if (randomDetection) {
+                    statusMessage.textContent = "Game detected! Reloading the page...";
+                    setTimeout(() => {
+                        location.reload();
+                    }, 5000); // Reload after 5 seconds
+                } else {
+                    statusMessage.textContent = "No games detected. Monitoring...";
+                }
+            }, 5000); // Check every 5 seconds
+        }
+    </script>
+</body>
+</html>
