@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Converter</title>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #373643;
+            color: white;
+            line-height: 1.8;
+        }
+
+        header {
+            background-color: #18cb96;
+            color: white;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            border-bottom: 4px solid #ffffff30;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        main {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: #2f2f37;
+            border-radius: 10px;
+            box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #18cb96;
+        }
+
+        label {
+            display: block;
+            margin: 1rem 0 0.5rem;
+            font-weight: bold;
+        }
+
+        input {
+            display: block;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            margin-top: 1rem;
+            padding: 0.8rem 1.5rem;
+            background-color: #18cb96;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #15a87d;
+        }
+
+        #download-link-container {
+            margin-top: 1.5rem;
+        }
+
+        #download-link {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #18cb96;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        #download-link:hover {
+            background-color: #15a87d;
+        }
+
+        footer {
+            background-color: #18cb96;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            border-top: 4px solid #ffffff30;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>File Converter</h1>
+    </header>
+    <main>
+        <h2>Convert Your File</h2>
+        <p>Upload a file without an extension, specify the desired extension, and download the updated file.</p>
+        <form id="converter-form">
+            <label for="file-input">Upload your file:</label>
+            <input type="file" id="file-input" required>
+
+            <label for="extension-input">Enter the desired extension (e.g., .txt, .png):</label>
+            <input type="text" id="extension-input" placeholder=".txt" required>
+
+            <button type="button" id="convert-button">Convert File</button>
+        </form>
+        <div id="download-link-container" style="display: none;">
+            <a id="download-link">Download Converted File</a>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 File Converter. All rights reserved.</p>
+    </footer>
+    <script>
+        document.getElementById('convert-button').addEventListener('click', function() {
+            const fileInput = document.getElementById('file-input').files[0];
+            const extensionInput = document.getElementById('extension-input').value.trim();
+
+            if (!fileInput || !extensionInput) {
+                alert('Please provide both a file and an extension.');
+                return;
+            }
+
+            const fileName = fileInput.name.split('.')[0] + extensionInput; // Add the extension to the file name
+            const link = document.getElementById('download-link');
+            const downloadContainer = document.getElementById('download-link-container');
+
+            // Create a blob for the file
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const blob = new Blob([e.target.result]);
+
+                // Create a downloadable link
+                link.href = URL.createObjectURL(blob);
+                link.download = fileName;
+                link.textContent = `Download ${fileName}`;
+                downloadContainer.style.display = 'block';
+            };
+            reader.readAsArrayBuffer(fileInput);
+        });
+    </script>
+</body>
+</html>
