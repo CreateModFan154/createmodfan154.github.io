@@ -1,0 +1,42 @@
+import obspython as obs
+import time
+
+# Name of the text source to update
+source_name = "DigitalClock"
+
+def update_clock():
+    source = obs.obs_get_source_by_name(source_name)
+    if source is not None:
+        now = time.strftime("%H:%M:%S")
+        settings = obs.obs_data_create()
+        obs.obs_data_set_string(settings, "text", now)
+        obs.obs_source_update(source, settings)
+        obs.obs_data_release(settings)
+        obs.obs_source_release(source)
+
+def timer_callback():
+    update_clock()
+
+def script_load(settings):
+    obs.timer_add(timer_callback, 1000)  # update every 1000 ms = 1 second
+
+def script_unload():
+    obs.timer_remove(timer_callback)
+
+def script_description():
+    return "Updates a text source with current time (digital clock HH:MM:SS)."
+
+def script_properties():
+    props = obs.obs_properties_create()
+    p = obs.obs_properties_add_text(props, "source_name", "Text Source Name", obs.OBS_TEXT_DEFAULT)
+    obs.obs_properties_set_modified_callback(props, on_source_name_changed)
+    return props
+
+def on_source_name_changed(props, prop, settings):
+    global source_name
+    source_name = obs.obs_data_get_string(settings, "source_name")
+    return True
+
+def script_update(settings):
+    global source_name
+    source_name = obs.obs_data_get_string(settings, "source_name")
