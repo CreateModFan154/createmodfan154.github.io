@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Admin Login - Minecraft UUID Finder</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #222;
+    color: #eee;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #login, #main {
+    background: #333;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px #000;
+    width: 320px;
+  }
+  input[type=text], input[type=password] {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0 15px 0;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+  }
+  button {
+    width: 100%;
+    padding: 10px;
+    background: #28a745;
+    border: none;
+    font-weight: bold;
+    color: white;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #218838;
+  }
+  #status {
+    margin-top: 10px;
+    color: #f55;
+    text-align: center;
+  }
+  #result {
+    margin-top: 20px;
+    font-family: monospace;
+    background: #222;
+    padding: 15px;
+    border-radius: 6px;
+    white-space: pre-wrap;
+  }
+</style>
+</head>
+<body>
+
+<div id="login">
+  <h2>Admin Login</h2>
+  <input type="text" id="username" placeholder="Username" autocomplete="off" />
+  <input type="password" id="password" placeholder="Password" autocomplete="off" />
+  <button onclick="tryLogin()">Login</button>
+  <div id="status"></div>
+</div>
+
+<div id="main" style="display:none;">
+  <h2>Minecraft UUID Finder</h2>
+  <input type="text" id="mcusername" placeholder="Enter Minecraft username" autocomplete="off" />
+  <button onclick="fetchUUID()">Get UUID</button>
+  <div id="result"></div>
+  <button style="margin-top:20px; background:#b33;" onclick="logout()">Logout</button>
+</div>
+
+<script>
+// Precomputed SHA-256 hashes of correct username and password
+const validUsernameHash = "cde9f2721a4271a364e554a26ef0fa34ebcfd3932db7ed33ea8d7f78debe4395";
+const validPasswordHash = "f59e2436a5f0ce8e364e8a26a5e427b74df4f74b0de87009ea5a41c5711eb58f";
+
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashHex;
+}
+
+async function tryLogin() {
+  const user = document.getElementById("username").value.trim();
+  const pass = document.getElementById("password").value;
+  const status = document.getElementById("status");
+
+  if (!user || !pass) {
+    status.textContent = "Please enter username and password.";
+    return;
+  }
+
+  const userHash = await sha256(user);
+  const passHash = await sha256(pass);
+
+  if (userHash === validUsernameHash && passHash === validPasswordHash) {
+    // Login success
+    document.getElementById("login").style.display = "none";
+    document.getElementById("main").style.display = "block";
+    status.textContent = "";
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+  } else {
+    status.textContent = "Invalid username or password.";
+  }
+}
+
+function logout() {
+  document.getElementById("main").style.display = "none";
+  document.getElementById("login").style.display = "block";
+  document.getElementById("result").textContent = "";
+  document.getElementById("mcusername").value = "";
+}
+
+function formatUUID(uuid) {
+  return uuid.slice(0,8) + '-' +
+         uuid.slice(8,12) + '-' +
+         uuid.slice(12,16) + '-' +
+         uuid.slice(16,20) + '-' +
+         uuid.slice(20);
+}
+
+function fetchUUID() {
+  const username = document.getElementById('mcusername').value.trim();
+  const resultDiv = document.getElementById('result');
+  if (!username) {
+    resultDiv.textContent = 'Please enter a username.';
+    return;
+  }
+  resultDiv.textContent = 'Fetching UUID...';
+
+  fetch(`https://api.mojang.com/users/profiles/minecraft/${username}`)
+    .then(response => {
+      if (!response.ok) throw new Error('User not found');
+      return response.json();
+    })
+    .then(data => {
+      const formatted = formatUUID(data.id);
+      resultDiv.innerHTML = `<strong>Username:</strong> ${data.name}<br/><strong>UUID:</strong> ${formatted}`;
+    })
+    .catch(err => {
+      resultDiv.textContent = `Error: ${err.message}`;
+    });
+}
+</script>
+
+</body>
+</html>
