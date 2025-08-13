@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MHTML to HTML Converter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .upload-area {
+            border: 3px dashed #4facfe;
+            border-radius: 15px;
+            padding: 60px 40px;
+            text-align: center;
+            background: #f8fbff;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 30px;
+        }
+
+        .upload-area:hover {
+            border-color: #00f2fe;
+            background: #f0f9ff;
+            transform: translateY(-2px);
+        }
+
+        .upload-area.dragover {
+            border-color: #00f2fe;
+            background: #e6f7ff;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: #4facfe;
+            margin-bottom: 20px;
+        }
+
+        .upload-text {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .upload-subtext {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-container {
+            margin: 30px 0;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .file-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .file-info h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .file-details {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .download-section {
+            text-align: center;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 10px 20px rgba(86, 171, 47, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .upload-area {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📄 MHTML to HTML Converter</h1>
+            <p>Convert your MHTML files to clean HTML format locally and securely</p>
+        </div>
+        
+        <div class="content">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">Drop your MHTML file here</div>
+                <div class="upload-subtext">or click to browse files</div>
+            </div>
+            
+            <input type="file" id="fileInput" accept=".mhtml,.mht" />
+            
+            <div class="file-info" id="fileInfo">
+                <h3>Selected File:</h3>
+                <div class="file-details" id="fileDetails"></div>
+            </div>
+            
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+            
+            <div class="status" id="status"></div>
+            
+            <div class="download-section" id="downloadSection">
+                <button class="btn btn-success" id="downloadBtn">
+                    💾 Download HTML File
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class MHTMLConverter {
+            constructor() {
+                this.uploadArea = document.getElementById('uploadArea');
+                this.fileInput = document.getElementById('fileInput');
+                this.fileInfo = document.getElementById('fileInfo');
+                this.fileDetails = document.getElementById('fileDetails');
+                this.progressContainer = document.getElementById('progressContainer');
+                this.progressFill = document.getElementById('progressFill');
+                this.status = document.getElementById('status');
+                this.downloadSection = document.getElementById('downloadSection');
+                this.downloadBtn = document.getElementById('downloadBtn');
+                
+                this.convertedHTML = '';
+                this.originalFileName = '';
+                
+                this.initEventListeners();
+            }
+            
+            initEventListeners() {
+                // Upload area click
+                this.uploadArea.addEventListener('click', () => {
+                    this.fileInput.click();
+                });
+                
+                // File input change
+                this.fileInput.addEventListener('change', (e) => {
+                    if (e.target.files.length > 0) {
+                        this.handleFile(e.target.files[0]);
+                    }
+                });
+                
+                // Drag and drop
+                this.uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    this.uploadArea.classList.add('dragover');
+                });
+                
+                this.uploadArea.addEventListener('dragleave', () => {
+                    this.uploadArea.classList.remove('dragover');
+                });
+                
+                this.uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    this.uploadArea.classList.remove('dragover');
+                    
+                    if (e.dataTransfer.files.length > 0) {
+                        this.handleFile(e.dataTransfer.files[0]);
+                    }
+                });
+                
+                // Download button
+                this.downloadBtn.addEventListener('click', () => {
+                    this.downloadHTML();
+                });
+            }
+            
+            handleFile(file) {
+                // Validate file type
+                if (!file.name.toLowerCase().endsWith('.mhtml') && !file.name.toLowerCase().endsWith('.mht')) {
+                    this.showStatus('Please select a valid MHTML file (.mhtml or .mht)', 'error');
+                    return;
+                }
+                
+                this.originalFileName = file.name;
+                this.showFileInfo(file);
+                this.convertFile(file);
+            }
+            
+            showFileInfo(file) {
+                const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+                this.fileDetails.innerHTML = `
+                    <strong>Name:</strong> ${file.name}<br>
+                    <strong>Size:</strong> ${sizeInMB} MB<br>
+                    <strong>Type:</strong> ${file.type || 'MHTML Document'}
+                `;
+                this.fileInfo.style.display = 'block';
+            }
+            
+            async convertFile(file) {
+                try {
+                    this.showProgress(true);
+                    this.updateProgress(10);
+                    
+                    // Read file content
+                    const content = await this.readFileAsText(file);
+                    this.updateProgress(30);
+                    
+                    // Parse MHTML
+                    const htmlContent = this.parseMHTML(content);
+                    this.updateProgress(80);
+                    
+                    if (htmlContent) {
+                        this.convertedHTML = htmlContent;
+                        this.updateProgress(100);
+                        
+                        setTimeout(() => {
+                            this.showProgress(false);
+                            this.showStatus('✅ Conversion completed successfully!', 'success');
+                            this.downloadSection.style.display = 'block';
+                        }, 500);
+                    } else {
+                        throw new Error('Could not extract HTML content from MHTML file');
+                    }
+                    
+                } catch (error) {
+                    this.showProgress(false);
+                    this.showStatus(`❌ Error: ${error.message}`, 'error');
+                    console.error('Conversion error:', error);
+                }
+            }
+            
+            readFileAsText(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = (e) => reject(new Error('Failed to read file'));
+                    reader.readAsText(file);
+                });
+            }
+            
+            parseMHTML(content) {
+                try {
+                    // Split content by MIME boundaries
+                    const lines = content.split('\n');
+                    let boundary = '';
+                    let htmlContent = '';
+                    let inHTMLSection = false;
+                    let contentType = '';
+                    
+                    // Find the boundary
+                    for (let line of lines) {
+                        if (line.toLowerCase().includes('boundary=')) {
+                            const match = line.match(/boundary=([^;\s]+)/i);
+                            if (match) {
+                                boundary = match[1].replace(/"/g, '');
+                                break;
+                            }
+                        }
+                    }
+                    
+                    // If no boundary found, try to extract HTML directly
+                    if (!boundary) {
+                        const htmlMatch = content.match(/<html[\s\S]*<\/html>/i);
+                        if (htmlMatch) {
+                            return this.cleanHTML(htmlMatch[0]);
+                        }
+                        throw new Error('No HTML content found in MHTML file');
+                    }
+                    
+                    // Parse sections separated by boundary
+                    const sections = content.split('--' + boundary);
+                    
+                    for (let section of sections) {
+                        const sectionLines = section.split('\n');
+                        contentType = '';
+                        
+                        // Check content type of this section
+                        for (let line of sectionLines) {
+                            if (line.toLowerCase().startsWith('content-type:')) {
+                                contentType = line.toLowerCase();
+                                break;
+                            }
+                        }
+                        
+                        // If this section contains HTML
+                        if (contentType.includes('text/html')) {
+                            // Find where headers end and content begins
+                            let contentStartIndex = -1;
+                            for (let i = 0; i < sectionLines.length; i++) {
+                                if (sectionLines[i].trim() === '') {
+                                    contentStartIndex = i + 1;
+                                    break;
+                                }
+                            }
+                            
+                            if (contentStartIndex > -1) {
+                                htmlContent = sectionLines.slice(contentStartIndex).join('\n');
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if (!htmlContent) {
+                        // Fallback: try to find HTML content anywhere in the file
+                        const htmlMatch = content.match(/<html[\s\S]*<\/html>/i);
+                        if (htmlMatch) {
+                            htmlContent = htmlMatch[0];
+                        } else {
+                            throw new Error('No HTML content found in MHTML file');
+                        }
+                    }
+                    
+                    return this.cleanHTML(htmlContent);
+                    
+                } catch (error) {
+                    throw new Error('Failed to parse MHTML file: ' + error.message);
+                }
+            }
+            
+            cleanHTML(html) {
+                // Remove any remaining MHTML headers or artifacts
+                html = html.replace(/^[\s\S]*?(<html)/i, '$1');
+                html = html.replace(/(<\/html>)[\s\S]*$/i, '$1');
+                
+                // Clean up common MHTML artifacts
+                html = html.replace(/=\r?\n/g, ''); // Remove quoted-printable line breaks
+                html = html.replace(/=([0-9A-F]{2})/g, (match, hex) => {
+                    return String.fromCharCode(parseInt(hex, 16));
+                });
+                
+                return html.trim();
+            }
+            
+            showProgress(show) {
+                this.progressContainer.style.display = show ? 'block' : 'none';
+                if (!show) {
+                    this.progressFill.style.width = '0%';
+                }
+            }
+            
+            updateProgress(percent) {
+                this.progressFill.style.width = percent + '%';
+            }
+            
+            showStatus(message, type) {
+                this.status.textContent = message;
+                this.status.className = `status ${type}`;
+                this.status.style.display = 'block';
+                
+                if (type === 'error') {
+                    this.downloadSection.style.display = 'none';
+                }
+            }
+            
+            downloadHTML() {
+                if (!this.convertedHTML) {
+                    this.showStatus('No converted content available', 'error');
+                    return;
+                }
+                
+                // Create download link
+                const blob = new Blob([this.convertedHTML], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                
+                // Generate filename
+                const baseName = this.originalFileName.replace(/\.(mhtml|mht)$/i, '');
+                const fileName = baseName + '_converted.html';
+                
+                // Create temporary link and trigger download
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                // Clean up
+                URL.revokeObjectURL(url);
+                
+                this.showStatus('✅ HTML file downloaded successfully!', 'success');
+            }
+        }
+        
+        // Initialize the converter when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new MHTMLConverter();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96e8b44b020fe8fb',t:'MTc1NTA5MzI2NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
