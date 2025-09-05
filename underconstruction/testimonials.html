@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testimonials - Under Construction Expedition</title>
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .construction-pattern {
+            background-image: 
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 10px,
+                    rgba(255,193,7,0.1) 10px,
+                    rgba(255,193,7,0.1) 20px
+                );
+        }
+        .star-rating {
+            color: #fbbf24;
+        }
+        
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        
+        .animate-scroll {
+            animation: scroll 60s linear infinite;
+        }
+        
+        .scrolling-reviews:hover {
+            animation-play-state: paused;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-12 construction-pattern">
+        <div class="container mx-auto px-6">
+            <div class="flex items-center justify-between mb-6">
+                <a href="index.html" class="flex items-center text-white hover:text-yellow-300 transition-colors">
+                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+                    </svg>
+                    Back to Home
+                </a>
+            </div>
+            <div class="text-center">
+                <div class="mb-4">
+                    <svg class="w-16 h-16 mx-auto mb-4 text-yellow-300" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                    </svg>
+                </div>
+                <h1 class="text-4xl font-bold mb-2">What Educators Are Saying</h1>
+                <p class="text-xl text-blue-100">Real feedback from real educators using Under Construction Expedition</p>
+                <div class="flex justify-center items-center mt-4 space-x-6 text-sm">
+                    <div class="flex items-center">
+                        <div class="flex star-rating mr-2">
+                            <span>★★★★★</span>
+                        </div>
+                        <span class="text-blue-200">4.9/5 Average Rating</span>
+                    </div>
+                    <div class="text-blue-200">500+ Reviews</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-6 py-12 max-w-6xl">
+        <!-- Featured Testimonial -->
+        <section class="bg-white rounded-xl shadow-lg p-8 mb-12">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Featured Success Story</h2>
+            </div>
+            <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-8">
+                <div class="flex items-start space-x-6">
+                    <div class="flex-shrink-0">
+                        <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                            SM
+                        </div>
+                    </div>
+                    <div class="flex-grow">
+                        <div class="flex star-rating mb-2">
+                            <span class="text-xl">★★★★★</span>
+                        </div>
+                        <blockquote class="text-lg text-gray-700 italic mb-4">
+                            "Under Construction Expedition completely transformed how my students engage with STEM concepts. 
+                            What used to be abstract theories became hands-on adventures. My class participation increased by 85%, 
+                            and test scores improved across the board. The students actually ask when we're doing the next expedition!"
+                        </blockquote>
+                        <div class="text-gray-600">
+                            <p class="font-semibold">Sarah Mitchell</p>
+                            <p class="text-sm">7th Grade Science Teacher, Lincoln Middle School</p>
+                            <p class="text-sm text-green-600 mt-1">Using UCE for 8 months • 150+ students impacted</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Grid -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Hear From Our Community</h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex star-rating mb-3">
+                        <span>★★★★★</span>
+                    </div>
+                    <blockquote class="text-gray-700 mb-4">
+                        "The interactive elements keep my kindergarteners engaged for the entire lesson. 
+                        They're learning complex concepts through play, and retention has never been better!"
+                    </blockquote>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center text-white font-bold mr-3">
+                            JR
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-800">Jessica Rodriguez</p>
+                            <p class="text-sm text-gray-600">Kindergarten Teacher</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex star-rating mb-3">
+                        <span>★★★★★</span>
+                    </div>
+                    <blockquote class="text-gray-700 mb-4">
+                        "As a principal, I've seen many educational tools come and go. UCE is different - 
+                        teachers actually request training on it, and parent feedback has been overwhelmingly positive."
+                    </blockquote>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold mr-3">
+                            DT
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-800">Dr. Michael Thompson</p>
+                            <p class="text-sm text-gray-600">Elementary School Principal</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex star-rating mb-3">
+                        <span>★★★★★</span>
+                    </div>
+                    <blockquote class="text-gray-700 mb-4">
+                        "My high school physics students were struggling with abstract concepts. 
+                        UCE made everything click - literally! The visual demonstrations are incredible."
+                    </blockquote>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold mr-3">
+                            AC
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-800">Amanda Chen</p>
+                            <p class="text-sm text-gray-600">High School Physics Teacher</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 4 -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex star-rating mb-3">
+                        <span>★★★★☆</span>
+                    </div>
+                    <blockquote class="text-gray-700 mb-4">
+                        "The setup was easier than I expected, and the support team was fantastic. 
+                        My students with learning differences especially benefit from the multi-sensory approach."
+                    </blockquote>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold mr-3">
+                            RW
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-800">Robert Williams</p>
+                            <p class="text-sm text-gray-600">Special Education Coordinator</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 5 -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex star-rating mb-3">
+                        <span>★★★★★</span>
+                    </div>
+                    <blockquote class="text-gray-700 mb-4">
+                        "I was skeptical about another 'educational technology,' but UCE proved me wrong. 
+                        It's not just tech for tech's sake - it genuinely enhances learning."
+                    </blockquote>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold mr-3">
+                            LM
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-800">Linda Martinez</p>
+                            <p class="text-sm text-gray-600">4th Grade Teacher, 25 years experience</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 6 -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex star-rating mb-3">
+                        <span>★★★★★</span>
+                    </div>
+                    <blockquote class="text-gray-700 mb-4">
+                        "Our university education students love practicing with UCE before their student teaching. 
+                        It gives them confidence and practical experience with innovative teaching methods."
+                    </blockquote>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center text-white font-bold mr-3">
+                            KJ
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-800">Prof. Kevin Johnson</p>
+                            <p class="text-sm text-gray-600">Education Department, State University</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scrolling Reviews Panel -->
+        <section class="bg-gradient-to-r from-indigo-600 to-purple-700 rounded-xl p-8 text-white mb-12 overflow-hidden">
+            <h2 class="text-3xl font-bold mb-8 text-center">What Middle & High School Students Say</h2>
+            <div class="relative">
+                <div class="scrolling-reviews flex space-x-6 animate-scroll">
+                    <!-- Review 1 -->
+                    <div class="bg-white bg-opacity-20 rounded-lg p-6 min-w-80 flex-shrink-0">
+                        <div class="flex star-rating mb-3 text-yellow-200">
+                            <span>★★★★★</span>
+                        </div>
+                        <blockquote class="text-lg mb-4">
+                            "Finally, a way to learn that doesn't put me to sleep! The construction challenges are actually fun and I'm getting better grades in physics."
+                        </blockquote>
+                        <p class="font-semibold">- Alex Chen, 11th Grade</p>
+                        <p class="text-sm text-indigo-200">Roosevelt High School</p>
+                    </div>
+
+                    <!-- Review 2 -->
+                    <div class="bg-white bg-opacity-20 rounded-lg p-6 min-w-80 flex-shrink-0">
+                        <div class="flex star-rating mb-3 text-yellow-200">
+                            <span>★★★★★</span>
+                        </div>
+                        <blockquote class="text-lg mb-4">
+                            "I used to think engineering was boring, but UCE showed me how cool it actually is. Now I want to study civil engineering in college!"
+                        </blockquote>
+                        <p class="font-semibold">- Maya Rodriguez, 10th Grade</p>
+                        <p class="text-sm text-indigo-200">Central High School</p>
+                    </div>
+
+                    <!-- Review 3 -->
+                    <div class="bg-white bg-opacity-20 rounded-lg p-6 min-w-80 flex-shrink-0">
+                        <div class="flex star-rating mb-3 text-yellow-200">
+                            <span>★★★★★</span>
+                        </div>
+                        <blockquote class="text-lg mb-4">
+                            "My teacher uses this for our STEM class and it's honestly the best part of my day. We get to build stuff and learn at the same time!"
+                        </blockquote>
+                        <p class="font-semibold">- Jordan Williams, 8th Grade</p>
+                        <p class="text-sm text-indigo-200">Lincoln Middle School</p>
+                    </div>
+
+                    <!-- Review 4 -->
+                    <div class="bg-white bg-opacity-20 rounded-lg p-6 min-w-80 flex-shrink-0">
+                        <div class="flex star-rating mb-3 text-yellow-200">
+                            <span>★★★★★</span>
+                        </div>
+                        <blockquote class="text-lg mb-4">
+                            "Math finally makes sense! When we're building bridges and calculating loads, I actually understand why we need algebra."
+                        </blockquote>
+                        <p class="font-semibold">- Emma Thompson, 9th Grade</p>
+                        <p class="text-sm text-indigo-200">Westfield High School</p>
+                    </div>
+
+                    <!-- Review 5 -->
+                    <div class="bg-white bg-opacity-20 rounded-lg p-6 min-w-80 flex-shrink-0">
+                        <div class="flex star-rating mb-3 text-yellow-200">
+                            <span>★★★★★</span>
+                        </div>
+                        <blockquote class="text-lg mb-4">
+                            "This is way better than just reading from textbooks. We actually get to see what happens when we mess up our calculations!"
+                        </blockquote>
+                        <p class="font-semibold">- Marcus Johnson, 7th Grade</p>
+                        <p class="text-sm text-indigo-200">Oak Valley Middle School</p>
+                    </div>
+
+                    <!-- Review 6 -->
+                    <div class="bg-white bg-opacity-20 rounded-lg p-6 min-w-80 flex-shrink-0">
+                        <div class="flex star-rating mb-3 text-yellow-200">
+                            <span>★★★★★</span>
+                        </div>
+                        <blockquote class="text-lg mb-4">
+                            "I never thought I'd say this, but science class is actually fun now. The expeditions make everything feel like a game."
+                        </blockquote>
+                        <p class="font-semibold">- Zoe Martinez, 12th Grade</p>
+                        <p class="text-sm text-indigo-200">Summit High School</p>
+                    </div>
+
+                    <!-- Review 7 -->
+                    <div class="bg-white bg-opacity-20 rounded-lg p-6 min-w-80 flex-shrink-0">
+                        <div class="flex star-rating mb-3 text-yellow-200">
+                            <span>★★★★★</span>
+                        </div>
+                        <blockquote class="text-lg mb-4">
+                            "My friends are jealous that our school has this program. We're learning the same stuff as them but in a way cooler way."
+                        </blockquote>
+                        <p class="font-semibold">- Tyler Brooks, 6th Grade</p>
+                        <p class="text-sm text-indigo-200">Riverside Middle School</p>
+                    </div>
+
+                    <!-- Review 8 -->
+                    <div class="bg-white bg-opacity-20 rounded-lg p-6 min-w-80 flex-shrink-0">
+                        <div class="flex star-rating mb-3 text-yellow-200">
+                            <span>★★★★★</span>
+                        </div>
+                        <blockquote class="text-lg mb-4">
+                            "I'm usually terrible at group projects, but these construction challenges actually make teamwork fun. We all want to succeed together."
+                        </blockquote>
+                        <p class="font-semibold">- Aisha Patel, 10th Grade</p>
+                        <p class="text-sm text-indigo-200">Tech Valley High School</p>
+                    </div>
+
+                    <!-- Duplicate reviews for seamless loop -->
+                    <div class="bg-white bg-opacity-20 rounded-lg p-6 min-w-80 flex-shrink-0">
+                        <div class="flex star-rating mb-3 text-yellow-200">
+                            <span>★★★★★</span>
+                        </div>
+                        <blockquote class="text-lg mb-4">
+                            "Finally, a way to learn that doesn't put me to sleep! The construction challenges are actually fun and I'm getting better grades in physics."
+                        </blockquote>
+                        <p class="font-semibold">- Alex Chen, 11th Grade</p>
+                        <p class="text-sm text-indigo-200">Roosevelt High School</p>
+                    </div>
+
+                    <div class="bg-white bg-opacity-20 rounded-lg p-6 min-w-80 flex-shrink-0">
+                        <div class="flex star-rating mb-3 text-yellow-200">
+                            <span>★★★★★</span>
+                        </div>
+                        <blockquote class="text-lg mb-4">
+                            "I used to think engineering was boring, but UCE showed me how cool it actually is. Now I want to study civil engineering in college!"
+                        </blockquote>
+                        <p class="font-semibold">- Maya Rodriguez, 10th Grade</p>
+                        <p class="text-sm text-indigo-200">Central High School</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Testimonials Section -->
+        <section class="bg-white rounded-xl shadow-lg p-8 mb-12">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Video Testimonials</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-gray-100 rounded-lg p-6 text-center">
+                    <div class="w-full h-48 bg-gradient-to-br from-blue-400 to-purple-500 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Teacher Success Story</h3>
+                    <p class="text-gray-600 mb-3">Watch how Mrs. Patterson transformed her classroom with UCE</p>
+                    <div class="flex star-rating justify-center mb-2">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="text-sm text-gray-500">3:42 • 2.1K views</p>
+                </div>
+
+                <div class="bg-gray-100 rounded-lg p-6 text-center">
+                    <div class="w-full h-48 bg-gradient-to-br from-green-400 to-teal-500 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Student Reactions</h3>
+                    <p class="text-gray-600 mb-3">See the excitement when students experience their first expedition</p>
+                    <div class="flex star-rating justify-center mb-2">
+                        <span>★★★★★</span>
+                    </div>
+                    <p class="text-sm text-gray-500">2:18 • 1.8K views</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics -->
+        <section class="bg-white rounded-xl shadow-lg p-8 mb-12">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">The Numbers Speak</h2>
+            <div class="grid md:grid-cols-4 gap-6 text-center">
+                <div class="p-6">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">98%</div>
+                    <div class="text-gray-600">Teacher Satisfaction</div>
+                    <div class="flex star-rating justify-center mt-2">
+                        <span class="text-sm">★★★★★</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="text-4xl font-bold text-green-600 mb-2">85%</div>
+                    <div class="text-gray-600">Increase in Engagement</div>
+                    <div class="text-sm text-gray-500 mt-2">Average across all subjects</div>
+                </div>
+                <div class="p-6">
+                    <div class="text-4xl font-bold text-purple-600 mb-2">92%</div>
+                    <div class="text-gray-600">Would Recommend</div>
+                    <div class="text-sm text-gray-500 mt-2">To other educators</div>
+                </div>
+                <div class="p-6">
+                    <div class="text-4xl font-bold text-orange-600 mb-2">76%</div>
+                    <div class="text-gray-600">Improved Test Scores</div>
+                    <div class="text-sm text-gray-500 mt-2">Within first semester</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detailed Case Study -->
+        <section class="bg-white rounded-xl shadow-lg p-8 mb-12">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Case Study: Riverside Elementary</h2>
+            <div class="bg-blue-50 rounded-lg p-6">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">The Challenge</h3>
+                        <p class="text-gray-600 mb-4">
+                            Riverside Elementary was struggling with low math scores and student disengagement. 
+                            Traditional teaching methods weren't connecting with their diverse student population.
+                        </p>
+                        
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">The Solution</h3>
+                        <p class="text-gray-600 mb-4">
+                            They implemented Under Construction Expedition across all 3rd-5th grade math classes, 
+                            focusing on hands-on problem-solving and collaborative learning experiences.
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">The Results</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Math Test Scores:</span>
+                                <span class="font-semibold text-green-600">+34% improvement</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Student Engagement:</span>
+                                <span class="font-semibold text-green-600">+89% increase</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Parent Satisfaction:</span>
+                                <span class="font-semibold text-green-600">95% positive</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Teacher Retention:</span>
+                                <span class="font-semibold text-green-600">100% stayed</span>
+                            </div>
+                        </div>
+                        
+                        <blockquote class="mt-6 p-4 bg-white rounded border-l-4 border-blue-500 italic text-gray-700">
+                            "UCE didn't just improve our test scores - it transformed our entire school culture. 
+                            Students are excited to learn, teachers are energized, and parents are amazed."
+                        </blockquote>
+                        <p class="text-sm text-gray-600 mt-2">- Principal Janet Foster, Riverside Elementary</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 text-white text-center">
+            <h2 class="text-3xl font-bold mb-4">Join Our Success Stories</h2>
+            <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                Ready to transform your classroom and create your own success story? 
+                Join hundreds of educators who are already seeing amazing results.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+                <a href="contact-us" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors duration-200">
+                    Start Your Journey
+                </a>
+                <a href="#" class="bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-800 transition-colors duration-200">
+                    Schedule a Demo
+                </a>
+            </div>
+            <p class="text-sm text-blue-200">
+                Have your own success story? <a href="contact-us" class="underline hover:text-white">Share it with us!</a>
+            </p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-8 mt-12">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-wrap justify-center items-center space-x-4 text-sm mb-4">
+                <a href="company" class="hover:text-white transition-colors">Company</a>
+                <span class="text-gray-500">|</span>
+                <a href="#" class="hover:text-white transition-colors">Blog</a>
+                <span class="text-gray-500">|</span>
+                <a href="#" class="hover:text-white transition-colors">Help center</a>
+                <span class="text-gray-500">|</span>
+                <a href="#" class="hover:text-white transition-colors">User guides</a>
+                <span class="text-gray-500">|</span>
+                <a href="#" class="hover:text-white transition-colors">Tell us what you think</a>
+                <span class="text-gray-500">|</span>
+                <a href="testimonials" class="hover:text-white transition-colors font-semibold">Testimonials</a>
+                <span class="text-gray-500">|</span>
+                <a href="contact-us" class="hover:text-white transition-colors">Contact us</a>
+                <span class="text-gray-500">|</span>
+                <a href="terms-of-use" class="hover:text-white transition-colors">Terms of service</a>
+                <span class="text-gray-500">|</span>
+                <a href="privacy-policy" class="hover:text-white transition-colors">Privacy policy</a>
+            </div>
+            <div class="text-center text-gray-400 text-sm">
+                <p>Under Construction Expedition © 2025 createmodfan12. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97a7171d32183178',t:'MTc1NzA4OTYwNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
