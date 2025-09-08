@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thoupipe Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .video-container {
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            background: #000;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+            min-height: 300px;
+        }
+
+        .file-drop-zone {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-drop-zone:hover {
+            background: rgba(0,0,0,0.9);
+        }
+
+        .file-drop-zone.hidden {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.7;
+        }
+
+        .controls {
+            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.8));
+            padding: 20px;
+            color: white;
+        }
+
+        .progress-container {
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #ff0000;
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        .progress-handle {
+            position: absolute;
+            top: -5px;
+            width: 16px;
+            height: 16px;
+            background: #ff0000;
+            border-radius: 50%;
+            cursor: pointer;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .progress-bar:hover .progress-handle {
+            opacity: 1;
+        }
+
+        .control-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        .control-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.1);
+        }
+
+        .play-btn {
+            font-size: 24px;
+            width: 48px;
+            height: 48px;
+        }
+
+        .frame-btn {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .time-display {
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            min-width: 100px;
+        }
+
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .volume-slider {
+            width: 80px;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .spacer {
+            flex: 1;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .speed-control {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .info-display {
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <div class="video-wrapper">
+            <video id="videoPlayer" preload="metadata">
+                Your browser does not support the video tag.
+            </video>
+            
+            <div class="file-drop-zone" id="dropZone">
+                <div class="upload-icon">📁</div>
+                <div>Click to select a video file or drag & drop</div>
+                <div style="font-size: 14px; opacity: 0.7; margin-top: 8px;">Supports MP4, WebM, MOV, AVI</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-fill" id="progressFill"></div>
+                    <div class="progress-handle" id="progressHandle"></div>
+                </div>
+            </div>
+
+            <div class="control-row">
+                <div class="control-group">
+                    <button class="control-btn play-btn" id="playBtn">▶️</button>
+                    <button class="control-btn frame-btn" id="frameBackBtn" title="Previous Frame">&lt;</button>
+                    <button class="control-btn frame-btn" id="frameForwardBtn" title="Next Frame">&gt;</button>
+                </div>
+
+                <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
+
+                <div class="control-group">
+                    <select class="speed-control" id="speedControl">
+                        <option value="0.25">0.25x</option>
+                        <option value="0.5">0.5x</option>
+                        <option value="1" selected>1x</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="2">2x</option>
+                    </select>
+                </div>
+
+                <div class="spacer"></div>
+
+                <div class="volume-container">
+                    <button class="control-btn" id="muteBtn">🔊</button>
+                    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="100">
+                </div>
+
+                <button class="control-btn" id="fullscreenBtn">⛶</button>
+            </div>
+
+            <div class="info-display" id="infoDisplay"></div>
+        </div>
+    </div>
+
+    <input type="file" class="file-input" id="fileInput" accept="video/*">
+
+    <script>
+        const video = document.getElementById('videoPlayer');
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const playBtn = document.getElementById('playBtn');
+        const frameBackBtn = document.getElementById('frameBackBtn');
+        const frameForwardBtn = document.getElementById('frameForwardBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const progressHandle = document.getElementById('progressHandle');
+        const timeDisplay = document.getElementById('timeDisplay');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const muteBtn = document.getElementById('muteBtn');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const speedControl = document.getElementById('speedControl');
+        const infoDisplay = document.getElementById('infoDisplay');
+
+        let isDragging = false;
+        let frameRate = 30; // Default frame rate, will be updated when video loads
+
+        // File handling
+        dropZone.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleFileSelect);
+
+        // Drag and drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.background = 'rgba(0,0,0,0.9)';
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.background = 'rgba(0,0,0,0.8)';
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.background = 'rgba(0,0,0,0.8)';
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                loadVideo(files[0]);
+            }
+        });
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                loadVideo(file);
+            }
+        }
+
+        function loadVideo(file) {
+            const url = URL.createObjectURL(file);
+            video.src = url;
+            dropZone.classList.add('hidden');
+            
+            video.addEventListener('loadedmetadata', () => {
+                // Try to estimate frame rate (default to 30 if can't determine)
+                frameRate = 30;
+                updateInfoDisplay(file);
+            });
+        }
+
+        function updateInfoDisplay(file) {
+            const size = (file.size / (1024 * 1024)).toFixed(1);
+            infoDisplay.textContent = `${file.name} • ${size}MB • ${video.videoWidth}x${video.videoHeight}`;
+        }
+
+        // Play/Pause
+        playBtn.addEventListener('click', togglePlay);
+        video.addEventListener('click', togglePlay);
+
+        function togglePlay() {
+            if (video.paused) {
+                video.play();
+                playBtn.textContent = '⏸️';
+            } else {
+                video.pause();
+                playBtn.textContent = '▶️';
+            }
+        }
+
+        // Frame navigation
+        frameBackBtn.addEventListener('click', () => {
+            if (video.src) {
+                video.currentTime = Math.max(0, video.currentTime - (1 / frameRate));
+            }
+        });
+
+        frameForwardBtn.addEventListener('click', () => {
+            if (video.src) {
+                video.currentTime = Math.min(video.duration, video.currentTime + (1 / frameRate));
+            }
+        });
+
+        // Progress bar
+        video.addEventListener('timeupdate', updateProgress);
+
+        function updateProgress() {
+            if (video.duration && !isDragging) {
+                const progress = (video.currentTime / video.duration) * 100;
+                progressFill.style.width = progress + '%';
+                progressHandle.style.left = progress + '%';
+            }
+            updateTimeDisplay();
+        }
+
+        function updateTimeDisplay() {
+            const current = formatTime(video.currentTime || 0);
+            const duration = formatTime(video.duration || 0);
+            timeDisplay.textContent = `${current} / ${duration}`;
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Progress bar interaction
+        progressBar.addEventListener('mousedown', startDrag);
+        progressBar.addEventListener('click', seekVideo);
+
+        function startDrag(e) {
+            isDragging = true;
+            seekVideo(e);
+            document.addEventListener('mousemove', seekVideo);
+            document.addEventListener('mouseup', stopDrag);
+        }
+
+        function stopDrag() {
+            isDragging = false;
+            document.removeEventListener('mousemove', seekVideo);
+            document.removeEventListener('mouseup', stopDrag);
+        }
+
+        function seekVideo(e) {
+            if (!video.duration) return;
+            const rect = progressBar.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            const time = pos * video.duration;
+            video.currentTime = Math.max(0, Math.min(video.duration, time));
+        }
+
+        // Volume control
+        volumeSlider.addEventListener('input', (e) => {
+            video.volume = e.target.value / 100;
+            updateMuteButton();
+        });
+
+        muteBtn.addEventListener('click', () => {
+            video.muted = !video.muted;
+            updateMuteButton();
+        });
+
+        function updateMuteButton() {
+            if (video.muted || video.volume === 0) {
+                muteBtn.textContent = '🔇';
+            } else if (video.volume < 0.5) {
+                muteBtn.textContent = '🔉';
+            } else {
+                muteBtn.textContent = '🔊';
+            }
+        }
+
+        // Speed control
+        speedControl.addEventListener('change', (e) => {
+            video.playbackRate = parseFloat(e.target.value);
+        });
+
+        // Fullscreen
+        fullscreenBtn.addEventListener('click', () => {
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            } else {
+                video.requestFullscreen();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (!video.src) return;
+            
+            switch(e.code) {
+                case 'Space':
+                    e.preventDefault();
+                    togglePlay();
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    video.currentTime = Math.max(0, video.currentTime - 5);
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    video.currentTime = Math.min(video.duration, video.currentTime + 5);
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    video.volume = Math.min(1, video.volume + 0.1);
+                    volumeSlider.value = video.volume * 100;
+                    break;
+                case 'ArrowDown':
+                    e.preventDefault();
+                    video.volume = Math.max(0, video.volume - 0.1);
+                    volumeSlider.value = video.volume * 100;
+                    break;
+                case 'KeyF':
+                    e.preventDefault();
+                    fullscreenBtn.click();
+                    break;
+                case 'Comma':
+                    e.preventDefault();
+                    frameBackBtn.click();
+                    break;
+                case 'Period':
+                    e.preventDefault();
+                    frameForwardBtn.click();
+                    break;
+            }
+        });
+
+        // Initialize
+        updateTimeDisplay();
+        updateMuteButton();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97bef2dca59e86e4',t:'MTc1NzMzOTc4MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
