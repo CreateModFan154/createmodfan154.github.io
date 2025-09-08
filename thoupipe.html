@@ -12,22 +12,58 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: 'Roboto', 'Arial', sans-serif;
+            background: #0f0f0f;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: #212121;
+            padding: 12px 24px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
+            justify-content: space-between;
+            border-bottom: 1px solid #303030;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 500;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo::before {
+            content: "▶";
+            background: #667eea;
+            color: white;
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .main-container {
+            display: flex;
+            max-width: 1280px;
+            margin: 0 auto;
+            gap: 24px;
+            padding: 24px;
+        }
+
+        .video-section {
+            flex: 1;
+            max-width: 854px;
         }
 
         .video-container {
             background: #000;
-            border-radius: 12px;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            max-width: 900px;
-            width: 100%;
+            margin-bottom: 16px;
         }
 
         .video-wrapper {
@@ -95,7 +131,7 @@
 
         .progress-fill {
             height: 100%;
-            background: #ff0000;
+            background: #667eea;
             border-radius: 3px;
             width: 0%;
             transition: width 0.1s ease;
@@ -106,7 +142,7 @@
             top: -5px;
             width: 16px;
             height: 16px;
-            background: #ff0000;
+            background: #667eea;
             border-radius: 50%;
             cursor: pointer;
             transform: translateX(-50%);
@@ -215,61 +251,206 @@
             color: rgba(255,255,255,0.7);
             margin-left: 10px;
         }
+
+        .video-info {
+            padding: 16px 0;
+            border-bottom: 1px solid #303030;
+        }
+
+        .video-title {
+            font-size: 20px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .video-meta {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 16px;
+        }
+
+        .upload-section {
+            background: #212121;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            border: 2px dashed #404040;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-section:hover {
+            border-color: #667eea;
+            background: #2a2a2a;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.7;
+        }
+
+        .upload-text {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .upload-subtext {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .sidebar {
+            width: 402px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-section {
+            background: #212121;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+
+        .recent-video {
+            display: flex;
+            gap: 12px;
+            padding: 8px 0;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s ease;
+        }
+
+        .recent-video:hover {
+            background: #303030;
+        }
+
+        .recent-thumbnail {
+            width: 120px;
+            height: 68px;
+            background: #404040;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .recent-info {
+            flex: 1;
+        }
+
+        .recent-title {
+            font-size: 14px;
+            font-weight: 400;
+            margin-bottom: 4px;
+            color: #fff;
+            line-height: 1.3;
+        }
+
+        .recent-meta {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #aaa;
+            font-size: 14px;
+            padding: 20px 0;
+        }
     </style>
 </head>
 <body>
-    <div class="video-container">
-        <div class="video-wrapper">
-            <video id="videoPlayer" preload="metadata">
-                Your browser does not support the video tag.
-            </video>
-            
-            <div class="file-drop-zone" id="dropZone">
-                <div class="upload-icon">📁</div>
-                <div>Click to select a video file or drag & drop</div>
-                <div style="font-size: 14px; opacity: 0.7; margin-top: 8px;">Supports MP4, WebM, MOV, AVI</div>
+    <div class="header">
+        <div class="logo">Thoupipe</div>
+    </div>
+    
+    <div class="main-container">
+        <div class="video-section">
+            <div class="video-container">
+                <div class="video-wrapper">
+                    <video id="videoPlayer" preload="metadata">
+                        Your browser does not support the video tag.
+                    </video>
+                    
+                    <div class="file-drop-zone" id="dropZone">
+                        <div class="upload-icon">📁</div>
+                        <div>Click to select a video file or drag & drop</div>
+                        <div style="font-size: 14px; opacity: 0.7; margin-top: 8px;">Supports MP4, WebM, MOV, AVI</div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progressBar">
+                            <div class="progress-fill" id="progressFill"></div>
+                            <div class="progress-handle" id="progressHandle"></div>
+                        </div>
+                    </div>
+
+                    <div class="control-row">
+                        <div class="control-group">
+                            <button class="control-btn play-btn" id="playBtn">▶️</button>
+                            <button class="control-btn frame-btn" id="frameBackBtn" title="Previous Frame">&lt;</button>
+                            <button class="control-btn frame-btn" id="frameForwardBtn" title="Next Frame">&gt;</button>
+                        </div>
+
+                        <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
+
+                        <div class="control-group">
+                            <select class="speed-control" id="speedControl">
+                                <option value="0.25">0.25x</option>
+                                <option value="0.5">0.5x</option>
+                                <option value="1" selected>1x</option>
+                                <option value="1.25">1.25x</option>
+                                <option value="1.5">1.5x</option>
+                                <option value="2">2x</option>
+                            </select>
+                        </div>
+
+                        <div class="spacer"></div>
+
+                        <div class="volume-container">
+                            <button class="control-btn" id="muteBtn">🔊</button>
+                            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="100">
+                        </div>
+
+                        <button class="control-btn" id="fullscreenBtn">⛶</button>
+                    </div>
+
+                    <div class="info-display" id="infoDisplay"></div>
+                </div>
+            </div>
+
+            <div class="video-info" id="videoInfo" style="display: none;">
+                <div class="video-title" id="videoTitle">Video Title</div>
+                <div class="video-meta" id="videoMeta">0 views • Just now</div>
+            </div>
+
+            <div class="upload-section" id="uploadSection">
+                <div class="upload-icon">📤</div>
+                <div class="upload-text">Upload Another Video</div>
+                <div class="upload-subtext">Click here to select another video file</div>
             </div>
         </div>
 
-        <div class="controls">
-            <div class="progress-container">
-                <div class="progress-bar" id="progressBar">
-                    <div class="progress-fill" id="progressFill"></div>
-                    <div class="progress-handle" id="progressHandle"></div>
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Recently Watched</div>
+                <div id="recentVideos">
+                    <div class="empty-state">No recent videos</div>
                 </div>
             </div>
-
-            <div class="control-row">
-                <div class="control-group">
-                    <button class="control-btn play-btn" id="playBtn">▶️</button>
-                    <button class="control-btn frame-btn" id="frameBackBtn" title="Previous Frame">&lt;</button>
-                    <button class="control-btn frame-btn" id="frameForwardBtn" title="Next Frame">&gt;</button>
-                </div>
-
-                <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
-
-                <div class="control-group">
-                    <select class="speed-control" id="speedControl">
-                        <option value="0.25">0.25x</option>
-                        <option value="0.5">0.5x</option>
-                        <option value="1" selected>1x</option>
-                        <option value="1.25">1.25x</option>
-                        <option value="1.5">1.5x</option>
-                        <option value="2">2x</option>
-                    </select>
-                </div>
-
-                <div class="spacer"></div>
-
-                <div class="volume-container">
-                    <button class="control-btn" id="muteBtn">🔊</button>
-                    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="100">
-                </div>
-
-                <button class="control-btn" id="fullscreenBtn">⛶</button>
-            </div>
-
-            <div class="info-display" id="infoDisplay"></div>
         </div>
     </div>
 
@@ -291,12 +472,92 @@
         const fullscreenBtn = document.getElementById('fullscreenBtn');
         const speedControl = document.getElementById('speedControl');
         const infoDisplay = document.getElementById('infoDisplay');
+        const videoInfo = document.getElementById('videoInfo');
+        const videoTitle = document.getElementById('videoTitle');
+        const videoMeta = document.getElementById('videoMeta');
+        const uploadSection = document.getElementById('uploadSection');
+        const recentVideos = document.getElementById('recentVideos');
 
         let isDragging = false;
         let frameRate = 30; // Default frame rate, will be updated when video loads
+        let currentVideoData = null;
+
+        // Recent videos storage (2 days cache)
+        function getRecentVideos() {
+            const stored = localStorage.getItem('thoupipe_recent');
+            if (!stored) return [];
+            
+            const videos = JSON.parse(stored);
+            const twoDaysAgo = Date.now() - (2 * 24 * 60 * 60 * 1000);
+            
+            // Filter out videos older than 2 days
+            const filtered = videos.filter(video => video.timestamp > twoDaysAgo);
+            
+            // Update storage with filtered list
+            localStorage.setItem('thoupipe_recent', JSON.stringify(filtered));
+            return filtered;
+        }
+
+        function addToRecentVideos(videoData) {
+            let recent = getRecentVideos();
+            
+            // Remove if already exists
+            recent = recent.filter(v => v.name !== videoData.name);
+            
+            // Add to beginning
+            recent.unshift(videoData);
+            
+            // Keep only last 10
+            recent = recent.slice(0, 10);
+            
+            localStorage.setItem('thoupipe_recent', JSON.stringify(recent));
+            updateRecentVideosList();
+        }
+
+        function updateRecentVideosList() {
+            const recent = getRecentVideos();
+            
+            if (recent.length === 0) {
+                recentVideos.innerHTML = '<div class="empty-state">No recent videos</div>';
+                return;
+            }
+            
+            recentVideos.innerHTML = recent.map(video => `
+                <div class="recent-video" data-video='${JSON.stringify(video)}'>
+                    <div class="recent-thumbnail">🎬</div>
+                    <div class="recent-info">
+                        <div class="recent-title">${video.name}</div>
+                        <div class="recent-meta">${video.size}MB • ${formatTimeAgo(video.timestamp)}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Add click handlers
+            document.querySelectorAll('.recent-video').forEach(item => {
+                item.addEventListener('click', () => {
+                    const videoData = JSON.parse(item.dataset.video);
+                    // Note: Can't reload file from recent list due to browser security
+                    // This would show a message or could trigger file picker
+                    alert('Please select this video file again from your computer');
+                });
+            });
+        }
+
+        function formatTimeAgo(timestamp) {
+            const diff = Date.now() - timestamp;
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+            
+            if (days > 0) return `${days}d ago`;
+            if (hours > 0) return `${hours}h ago`;
+            if (minutes > 0) return `${minutes}m ago`;
+            return 'Just now';
+        }
 
         // File handling
         dropZone.addEventListener('click', () => fileInput.click());
+        uploadSection.addEventListener('click', () => fileInput.click());
         fileInput.addEventListener('change', handleFileSelect);
 
         // Drag and drop
@@ -330,16 +591,35 @@
             video.src = url;
             dropZone.classList.add('hidden');
             
+            // Store current video data
+            currentVideoData = {
+                name: file.name,
+                size: (file.size / (1024 * 1024)).toFixed(1),
+                timestamp: Date.now()
+            };
+            
             video.addEventListener('loadedmetadata', () => {
                 // Try to estimate frame rate (default to 30 if can't determine)
                 frameRate = 30;
-                updateInfoDisplay(file);
+                updateVideoInfo(file);
+                
+                // Add to recent videos
+                addToRecentVideos(currentVideoData);
+                
+                // Show video info section
+                videoInfo.style.display = 'block';
             });
         }
 
-        function updateInfoDisplay(file) {
+        function updateVideoInfo(file) {
             const size = (file.size / (1024 * 1024)).toFixed(1);
+            
+            // Update info display in controls
             infoDisplay.textContent = `${file.name} • ${size}MB • ${video.videoWidth}x${video.videoHeight}`;
+            
+            // Update video info section
+            videoTitle.textContent = file.name;
+            videoMeta.textContent = `${size}MB • ${video.videoWidth}x${video.videoHeight} • Just uploaded`;
         }
 
         // Play/Pause
@@ -498,6 +778,7 @@
         // Initialize
         updateTimeDisplay();
         updateMuteButton();
+        updateRecentVideosList();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97bef2dca59e86e4',t:'MTc1NzMzOTc4MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c1764b1147bfa2',t:'MTc1NzM2NjEzNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
