@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thoupipe Player</title>
+    <title>Thoupipe - Video Player</title>
     <style>
         * {
             margin: 0;
@@ -368,11 +368,251 @@
             font-size: 14px;
             padding: 20px 0;
         }
+
+        .settings-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        .settings-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: rotate(90deg);
+        }
+
+        .settings-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .settings-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .settings-content {
+            background: #212121;
+            border-radius: 12px;
+            padding: 24px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .settings-modal.active .settings-content {
+            transform: scale(1);
+        }
+
+        .settings-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #333;
+        }
+
+        .settings-title {
+            font-size: 20px;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            color: white;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .setting-group {
+            margin-bottom: 24px;
+        }
+
+        .setting-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #fff;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .setting-description {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 12px;
+        }
+
+        .setting-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .setting-select {
+            background: #333;
+            border: 1px solid #444;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .setting-select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .setting-slider {
+            flex: 1;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .setting-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #667eea;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .setting-value {
+            font-size: 14px;
+            color: #aaa;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        .toggle-switch {
+            width: 44px;
+            height: 24px;
+            background: #333;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: #667eea;
+        }
+
+        .toggle-handle {
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-switch.active .toggle-handle {
+            transform: translateX(20px);
+        }
+
+        .secret-setting {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 32px;
+            border: 1px solid #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .secret-setting:hover {
+            border-color: #667eea;
+            background: #222;
+        }
+
+        .secret-title {
+            font-size: 12px;
+            font-weight: 500;
+            color: #667eea;
+            margin-bottom: 8px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+
+        .secret-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .secret-label {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .matrix-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .matrix-overlay.active {
+            opacity: 0.7;
+        }
+
+        .matrix-canvas {
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <div class="logo">Thoupipe</div>
+        <button class="settings-btn" id="settingsBtn">⚙️</button>
     </div>
     
     <div class="main-container">
@@ -382,6 +622,10 @@
                     <video id="videoPlayer" preload="metadata">
                         Your browser does not support the video tag.
                     </video>
+                    
+                    <div class="matrix-overlay" id="matrixOverlay">
+                        <canvas class="matrix-canvas" id="matrixCanvas"></canvas>
+                    </div>
                     
                     <div class="file-drop-zone" id="dropZone">
                         <div class="upload-icon">📁</div>
@@ -456,6 +700,100 @@
 
     <input type="file" class="file-input" id="fileInput" accept="video/*">
 
+    <!-- Settings Modal -->
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-content">
+            <div class="settings-header">
+                <div class="settings-title">Settings</div>
+                <button class="close-btn" id="closeSettings">×</button>
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">Video Quality</label>
+                <div class="setting-description">Choose default video quality preference</div>
+                <div class="setting-control">
+                    <select class="setting-select" id="qualitySetting">
+                        <option value="auto">Auto</option>
+                        <option value="1080p">1080p</option>
+                        <option value="720p">720p</option>
+                        <option value="480p">480p</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">Default Volume</label>
+                <div class="setting-description">Set the default volume level for new videos</div>
+                <div class="setting-control">
+                    <input type="range" class="setting-slider" id="defaultVolume" min="0" max="100" value="100">
+                    <span class="setting-value" id="volumeValue">100%</span>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">Autoplay</label>
+                <div class="setting-description">Automatically play videos when loaded</div>
+                <div class="setting-control">
+                    <div class="toggle-switch" id="autoplayToggle">
+                        <div class="toggle-handle"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">Loop Videos</label>
+                <div class="setting-description">Automatically restart videos when they end</div>
+                <div class="setting-control">
+                    <div class="toggle-switch" id="loopToggle">
+                        <div class="toggle-handle"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">Theme</label>
+                <div class="setting-description">Choose your preferred color theme</div>
+                <div class="setting-control">
+                    <select class="setting-select" id="themeSetting">
+                        <option value="dark">Dark</option>
+                        <option value="light">Light</option>
+                        <option value="auto">Auto (System)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">Keyboard Shortcuts</label>
+                <div class="setting-description">Enable keyboard controls for video playback</div>
+                <div class="setting-control">
+                    <div class="toggle-switch active" id="shortcutsToggle">
+                        <div class="toggle-handle"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">Remember Recent Videos</label>
+                <div class="setting-description">Keep a history of recently watched videos</div>
+                <div class="setting-control">
+                    <div class="toggle-switch active" id="historyToggle">
+                        <div class="toggle-handle"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="secret-setting" id="secretSetting">
+                <div class="secret-title">ΤΙΜΣ FΘᴙ  ƧTᴙΣΛΜ</div>
+                <div class="secret-toggle">
+                    <span class="secret-label">Matrix Mode</span>
+                    <div class="toggle-switch" id="matrixToggle">
+                        <div class="toggle-handle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         const video = document.getElementById('videoPlayer');
         const dropZone = document.getElementById('dropZone');
@@ -477,10 +815,69 @@
         const videoMeta = document.getElementById('videoMeta');
         const uploadSection = document.getElementById('uploadSection');
         const recentVideos = document.getElementById('recentVideos');
+        const matrixToggle = document.getElementById('matrixToggle');
+        const matrixOverlay = document.getElementById('matrixOverlay');
+        const matrixCanvas = document.getElementById('matrixCanvas');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const settingsModal = document.getElementById('settingsModal');
+        const closeSettings = document.getElementById('closeSettings');
+        const defaultVolumeSlider = document.getElementById('defaultVolume');
+        const volumeValue = document.getElementById('volumeValue');
+        const autoplayToggle = document.getElementById('autoplayToggle');
+        const loopToggle = document.getElementById('loopToggle');
+        const shortcutsToggle = document.getElementById('shortcutsToggle');
+        const historyToggle = document.getElementById('historyToggle');
 
         let isDragging = false;
         let frameRate = 30; // Default frame rate, will be updated when video loads
         let currentVideoData = null;
+        let matrixActive = false;
+        let matrixAnimation = null;
+        let keyboardShortcutsEnabled = true;
+        let autoplayEnabled = false;
+        let loopEnabled = false;
+        let historyEnabled = true;
+
+        // Settings management
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('thoupipe_settings') || '{}');
+            
+            // Apply default volume
+            if (settings.defaultVolume !== undefined) {
+                video.volume = settings.defaultVolume / 100;
+                volumeSlider.value = settings.defaultVolume;
+                defaultVolumeSlider.value = settings.defaultVolume;
+                volumeValue.textContent = settings.defaultVolume + '%';
+            }
+            
+            // Apply autoplay setting
+            autoplayEnabled = settings.autoplay || false;
+            autoplayToggle.classList.toggle('active', autoplayEnabled);
+            
+            // Apply loop setting
+            loopEnabled = settings.loop || false;
+            loopToggle.classList.toggle('active', loopEnabled);
+            video.loop = loopEnabled;
+            
+            // Apply keyboard shortcuts setting
+            keyboardShortcutsEnabled = settings.shortcuts !== false;
+            shortcutsToggle.classList.toggle('active', keyboardShortcutsEnabled);
+            
+            // Apply history setting
+            historyEnabled = settings.history !== false;
+            historyToggle.classList.toggle('active', historyEnabled);
+        }
+
+        function saveSettings() {
+            const settings = {
+                defaultVolume: parseInt(defaultVolumeSlider.value),
+                autoplay: autoplayEnabled,
+                loop: loopEnabled,
+                shortcuts: keyboardShortcutsEnabled,
+                history: historyEnabled
+            };
+            localStorage.setItem('thoupipe_settings', JSON.stringify(settings));
+        }
 
         // Recent videos storage (2 days cache)
         function getRecentVideos() {
@@ -499,6 +896,8 @@
         }
 
         function addToRecentVideos(videoData) {
+            if (!historyEnabled) return;
+            
             let recent = getRecentVideos();
             
             // Remove if already exists
@@ -513,6 +912,58 @@
             localStorage.setItem('thoupipe_recent', JSON.stringify(recent));
             updateRecentVideosList();
         }
+
+        // Settings modal controls
+        settingsBtn.addEventListener('click', () => {
+            settingsModal.classList.add('active');
+        });
+
+        closeSettings.addEventListener('click', () => {
+            settingsModal.classList.remove('active');
+        });
+
+        settingsModal.addEventListener('click', (e) => {
+            if (e.target === settingsModal) {
+                settingsModal.classList.remove('active');
+            }
+        });
+
+        // Settings controls
+        defaultVolumeSlider.addEventListener('input', (e) => {
+            volumeValue.textContent = e.target.value + '%';
+            video.volume = e.target.value / 100;
+            volumeSlider.value = e.target.value;
+            saveSettings();
+        });
+
+        autoplayToggle.addEventListener('click', () => {
+            autoplayEnabled = !autoplayEnabled;
+            autoplayToggle.classList.toggle('active', autoplayEnabled);
+            saveSettings();
+        });
+
+        loopToggle.addEventListener('click', () => {
+            loopEnabled = !loopEnabled;
+            loopToggle.classList.toggle('active', loopEnabled);
+            video.loop = loopEnabled;
+            saveSettings();
+        });
+
+        shortcutsToggle.addEventListener('click', () => {
+            keyboardShortcutsEnabled = !keyboardShortcutsEnabled;
+            shortcutsToggle.classList.toggle('active', keyboardShortcutsEnabled);
+            saveSettings();
+        });
+
+        historyToggle.addEventListener('click', () => {
+            historyEnabled = !historyEnabled;
+            historyToggle.classList.toggle('active', historyEnabled);
+            if (!historyEnabled) {
+                localStorage.removeItem('thoupipe_recent');
+                updateRecentVideosList();
+            }
+            saveSettings();
+        });
 
         function updateRecentVideosList() {
             const recent = getRecentVideos();
@@ -608,11 +1059,23 @@
                 
                 // Show video info section
                 videoInfo.style.display = 'block';
+                
+                // Autoplay if enabled
+                if (autoplayEnabled) {
+                    video.play();
+                    playBtn.textContent = '⏸️';
+                }
             });
         }
 
         function updateVideoInfo(file) {
             const size = (file.size / (1024 * 1024)).toFixed(1);
+            
+            // Get filename without extension
+            const nameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
+            
+            // Update page title
+            document.title = `Thoupipe player ${nameWithoutExt}`;
             
             // Update info display in controls
             infoDisplay.textContent = `${file.name} • ${size}MB • ${video.videoWidth}x${video.videoHeight}`;
@@ -735,7 +1198,7 @@
 
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
-            if (!video.src) return;
+            if (!video.src || !keyboardShortcutsEnabled) return;
             
             switch(e.code) {
                 case 'Space':
@@ -775,10 +1238,70 @@
             }
         });
 
+        // Matrix Mode Toggle
+        matrixToggle.addEventListener('click', () => {
+            matrixActive = !matrixActive;
+            matrixToggle.classList.toggle('active', matrixActive);
+            matrixOverlay.classList.toggle('active', matrixActive);
+            
+            if (matrixActive) {
+                startMatrixEffect();
+            } else {
+                stopMatrixEffect();
+            }
+        });
+
+        function startMatrixEffect() {
+            const ctx = matrixCanvas.getContext('2d');
+            
+            function resizeCanvas() {
+                matrixCanvas.width = matrixCanvas.offsetWidth;
+                matrixCanvas.height = matrixCanvas.offsetHeight;
+            }
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()";
+            const fontSize = 14;
+            const columns = Math.floor(matrixCanvas.width / fontSize);
+            const drops = Array(columns).fill(1);
+            
+            function drawMatrix() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+                
+                ctx.fillStyle = '#00ff00';
+                ctx.font = fontSize + 'px monospace';
+                
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    
+                    if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+            
+            matrixAnimation = setInterval(drawMatrix, 50);
+        }
+
+        function stopMatrixEffect() {
+            if (matrixAnimation) {
+                clearInterval(matrixAnimation);
+                matrixAnimation = null;
+            }
+            const ctx = matrixCanvas.getContext('2d');
+            ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+        }
+
         // Initialize
         updateTimeDisplay();
         updateMuteButton();
         updateRecentVideosList();
+        loadSettings();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c1764b1147bfa2',t:'MTc1NzM2NjEzNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c6e0025615f50d',t:'MTc1NzQyMjg5NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
