@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live HTML Previewer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .editor {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto p-6">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">Live HTML Previewer</h1>
+            <p class="text-gray-600">Type HTML code on the left and see it come to life on the right!</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="bg-white rounded-xl shadow-2xl overflow-hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 min-h-[600px]">
+                <!-- Code Editor Panel -->
+                <div class="bg-gray-900 p-6 flex flex-col">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-white font-semibold text-lg">HTML Code</h2>
+                        <button id="clearBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                            Clear
+                        </button>
+                    </div>
+                    <textarea 
+                        id="htmlInput" 
+                        class="editor flex-1 bg-gray-800 text-green-400 p-4 rounded-lg border-none outline-none resize-none text-sm leading-relaxed"
+                        placeholder="Type your HTML code here...
+Example:
+<h1>Hello World!</h1>
+<p style='color: blue;'>This is a paragraph</p>
+<button onclick='alert(\"Hello!\")'>Click me</button>"
+                        spellcheck="false"
+                    ></textarea>
+                    
+                    <!-- Code Stats -->
+                    <div class="mt-4 text-gray-400 text-sm flex justify-between">
+                        <span id="lineCount">Lines: 1</span>
+                        <span id="charCount">Characters: 0</span>
+                    </div>
+                </div>
+
+                <!-- Preview Panel -->
+                <div class="bg-white p-6 flex flex-col">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-gray-800 font-semibold text-lg">Live Preview</h2>
+                        <button id="refreshBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                            Refresh
+                        </button>
+                    </div>
+                    <div class="flex-1 border-2 border-gray-200 rounded-lg overflow-auto">
+                        <iframe 
+                            id="preview" 
+                            class="w-full h-full min-h-[500px] border-none"
+                            sandbox="allow-scripts allow-same-origin"
+                        ></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Info -->
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                <div class="text-3xl mb-3">⚡</div>
+                <h3 class="font-semibold text-gray-800 mb-2">Real-time Preview</h3>
+                <p class="text-gray-600 text-sm">See your HTML changes instantly as you type</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                <div class="text-3xl mb-3">🎨</div>
+                <h3 class="font-semibold text-gray-800 mb-2">Full HTML Support</h3>
+                <p class="text-gray-600 text-sm">CSS, JavaScript, and all HTML elements work</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                <div class="text-3xl mb-3">📱</div>
+                <h3 class="font-semibold text-gray-800 mb-2">Responsive Design</h3>
+                <p class="text-gray-600 text-sm">Works perfectly on desktop, tablet, and mobile</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const htmlInput = document.getElementById('htmlInput');
+        const preview = document.getElementById('preview');
+        const clearBtn = document.getElementById('clearBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const lineCount = document.getElementById('lineCount');
+        const charCount = document.getElementById('charCount');
+
+        // Update preview function
+        function updatePreview() {
+            const htmlCode = htmlInput.value;
+            const previewDoc = preview.contentDocument || preview.contentWindow.document;
+            
+            previewDoc.open();
+            previewDoc.write(htmlCode);
+            previewDoc.close();
+        }
+
+        // Update stats function
+        function updateStats() {
+            const text = htmlInput.value;
+            const lines = text.split('\n').length;
+            const chars = text.length;
+            
+            lineCount.textContent = `Lines: ${lines}`;
+            charCount.textContent = `Characters: ${chars}`;
+        }
+
+        // Real-time preview update
+        htmlInput.addEventListener('input', function() {
+            updatePreview();
+            updateStats();
+        });
+
+        // Clear button functionality
+        clearBtn.addEventListener('click', function() {
+            htmlInput.value = '';
+            updatePreview();
+            updateStats();
+            htmlInput.focus();
+        });
+
+        // Refresh button functionality
+        refreshBtn.addEventListener('click', function() {
+            updatePreview();
+        });
+
+        // Tab key support for better coding experience
+        htmlInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = this.selectionStart;
+                const end = this.selectionEnd;
+                
+                this.value = this.value.substring(0, start) + '  ' + this.value.substring(end);
+                this.selectionStart = this.selectionEnd = start + 2;
+            }
+        });
+
+        // Initialize with sample content
+        htmlInput.value = `<h1 style="color: #4F46E5; text-align: center;">Welcome to HTML Previewer!</h1>
+<p style="font-size: 18px; color: #374151; margin: 20px 0;">
+    This is a <strong>live HTML previewer</strong>. Try editing this code and watch the preview update instantly!
+</p>
+<div style="background: linear-gradient(45deg, #FF6B6B, #4ECDC4); padding: 20px; border-radius: 10px; color: white; text-align: center; margin: 20px 0;">
+    <h2>Interactive Elements Work Too!</h2>
+    <button onclick="alert('Hello from the preview!')" style="background: white; color: #333; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 10px;">
+        Click Me!
+    </button>
+</div>
+<ul style="background: #F3F4F6; padding: 20px; border-radius: 8px;">
+    <li>✅ Real-time preview</li>
+    <li>✅ Full HTML, CSS, and JavaScript support</li>
+    <li>✅ Responsive design</li>
+    <li>✅ Easy to use interface</li>
+</ul>`;
+
+        // Initial preview and stats update
+        updatePreview();
+        updateStats();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97f8a5dec3cbe114',t:'MTc1Nzk0NDgwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
