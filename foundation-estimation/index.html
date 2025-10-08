@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Foundation Depth Estimator (Single File)</title>
+  <style>
+    /* Embedded styles from styles.css - compacted for single-file use */
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7f8fb;
+      margin: 0;
+      padding: 20px;
+      color: #222;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 18px;
+      align-items: start;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1 {
+      grid-column: 1 / -1;
+      margin: 0 0 12px 0;
+    }
+    .panel {
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.04);
+      margin-bottom: 12px;
+    }
+    .canvas-wrap {
+      border: 1px solid #ddd;
+      margin-top: 8px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #eee;
+    }
+    canvas {
+      background: transparent;
+      max-width: 100%;
+      height: auto;
+      cursor: crosshair;
+    }
+    .controls-row {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .controls-row button {
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #cfcfcf;
+      background: #fff;
+      cursor: pointer;
+    }
+    .inline { margin-top: 8px; display:flex; gap:8px; align-items:center; }
+    label { display: block; margin-top: 8px; font-size: 14px; }
+    input[type="number"], select, input[type="file"] {
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-left: 6px;
+    }
+    .right .panel.results { position: sticky; top: 12px; }
+    .results p { margin: 8px 0; }
+    .disclaimer {
+      margin-top: 12px;
+      font-size: 12px;
+      background: #fff3cd;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ffeeba;
+    }
+    /* small responsive tweak */
+    @media (max-width: 900px) {
+      .container { grid-template-columns: 1fr; }
+      .right .panel.results { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Foundation Depth & Slab Estimator (Single-file)</h1>
+
+    <section class="left">
+      <div class="panel">
+        <h2>1) Upload site sketch / photo</h2>
+        <input type="file" id="imageLoader" accept="image/*" />
+        <div class="canvas-wrap">
+          <canvas id="siteCanvas" width="900" height="520"></canvas>
+        </div>
+        <div class="controls-row">
+          <button id="startDraw">Start Drawing</button>
+          <button id="finishPoly">Finish Polygon</button>
+          <button id="clearPoly">Clear</button>
+        </div>
+
+        <h3>Calibration (set scale)</h3>
+        <p>Click two points on the image to measure a known distance, then enter the real distance in feet to calibrate scale.</p>
+        <div class="controls-row">
+          <button id="measureBtn">Measure Two Points</button>
+          <button id="clearMeasure">Clear Measurement</button>
+        </div>
+        <div class="inline">
+          <label>Measured distance (ft): <input id="measuredFeet" type="number" step="any" min="0" /></label>
+          <button id="setScaleBtn">Set Scale</button>
+        </div>
+        <p id="scaleInfo">Scale: not set</p>
+      </div>
+
+      <div class="panel">
+        <h2>2) Quick alternative</h2>
+        <p>If you prefer, skip drawing and just enter square footage per floor directly.</p>
+        <label>Square footage per floor: <input id="manualArea" type="number" step="any" min="0" /></label>
+      </div>
+    </section>
+
+    <section class="right">
+      <div class="panel">
+        <h2>3) Building / Site inputs</h2>
+        <label>Number of floors: <input id="floors" type="number" value="2" min="1" /></label>
+
+        <label>Building use:
+          <select id="buildingUse">
+            <option value="residential">Residential (default live 40 psf)</option>
+            <option value="office">Office (default live 50 psf)</option>
+            <option value="parking">Parking / Garage (default live 250 psf)</option>
+            <option value="industrial">Industrial (default live 100 psf)</option>
+          </select>
+        </label>
+
+        <label>Region (approximate):
+          <select id="region">
+            <option value="northern_europe">Northern Europe / Cold (Frost depth ~4.5 ft)</option>
+            <option value="northeast_us">Northeast US (Frost depth ~4 ft)</option>
+            <option value="midwest_us">Midwest US (Frost depth ~3.5 ft)</option>
+            <option value="southeast_us">Southeast US / Mild (Frost depth ~1 ft)</option>
+            <option value="tropical">Tropical / No frost</option>
+            <option value="rocky">Rocky / bedrock near surface</option>
+          </select>
+        </label>
+
+        <label>Soil condition (override, optional):
+          <select id="soil">
+            <option value="">Let region decide (recommended)</option>
+            <option value="soft_clay">Soft clay (~1000 psf)</option>
+            <option value="medium_sand">Medium sand (~2000 psf)</option>
+            <option value="stiff_clay">Stiff clay (~3000 psf)</option>
+            <option value="dense_sand">Dense sand (~4000 psf)</option>
+            <option value="bedrock">Bedrock (10000+ psf)</option>
+          </select>
+        </label>
+
+        <h3>Override loads (optional)</h3>
+        <label>Dead load per floor (psf): <input id="deadLoad" type="number" value="15" step="any" /></label>
+        <label>Live load per floor (psf): <input id="liveLoad" type="number" value="40" step="any" /></label>
+
+        <div class="controls-row">
+          <button id="computeBtn">Compute Estimate</button>
+          <button id="resetBtn">Reset</button>
+        </div>
+      </div>
+
+      <div class="panel results">
+        <h2>Results & Guidance</h2>
+        <div id="resultsArea">
+          <p>No calculation yet. Draw a polygon or enter square footage and click "Compute Estimate".</p>
+        </div>
+        <div class="disclaimer">
+          <strong>Important:</strong> This tool provides simplified, approximate guidance only. It is NOT a replacement for a licensed structural or geotechnical engineer. Use these numbers for early-stage planning only.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // All logic from app.js inlined for single-file distribution
+    (function () {
+      const canvas = document.getElementById('siteCanvas');
+      const ctx = canvas.getContext('2d');
+
+      let bgImage = null;
+      let drawing = false;
+      let measuring = false;
+      let vertices = [];
+      let measurePts = [];
+      let pixelsPerFoot = null;
+
+      // UI elements
+      const imageLoader = document.getElementById('imageLoader');
+      const startDraw = document.getElementById('startDraw');
+      const finishPoly = document.getElementById('finishPoly');
+      const clearPoly = document.getElementById('clearPoly');
+      const measureBtn = document.getElementById('measureBtn');
+      const clearMeasure = document.getElementById('clearMeasure');
+      const measuredFeet = document.getElementById('measuredFeet');
+      const setScaleBtn = document.getElementById('setScaleBtn');
+      const scaleInfo = document.getElementById('scaleInfo');
+      const manualArea = document.getElementById('manualArea');
+      const computeBtn = document.getElementById('computeBtn');
+      const resultsArea = document.getElementById('resultsArea');
+      const resetBtn = document.getElementById('resetBtn');
+
+      // Inputs
+      const floorsInput = document.getElementById('floors');
+      const buildingUse = document.getElementById('buildingUse');
+      const region = document.getElementById('region');
+      const soil = document.getElementById('soil');
+      const deadLoadInput = document.getElementById('deadLoad');
+      const liveLoadInput = document.getElementById('liveLoad');
+
+      function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (bgImage) {
+          ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+        } else {
+          ctx.fillStyle = '#eee';
+          ctx.fillRect(0,0,canvas.width,canvas.height);
+        }
+      }
+
+      function redraw() {
+        clearCanvas();
+        // polygon
+        if (vertices.length > 0) {
+          ctx.strokeStyle = 'rgba(0,130,200,0.9)';
+          ctx.fillStyle = 'rgba(0,130,200,0.25)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(vertices[0].x, vertices[0].y);
+          for (let i = 1; i < vertices.length; i++) ctx.lineTo(vertices[i].x, vertices[i].y);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          for (const p of vertices) {
+            ctx.fillStyle = '#0277bd';
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 4, 0, Math.PI*2);
+            ctx.fill();
+          }
+        }
+        // measurement
+        if (measurePts.length > 0) {
+          ctx.strokeStyle = 'red';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(measurePts[0].x, measurePts[0].y);
+          if (measurePts[1]) ctx.lineTo(measurePts[1].x, measurePts[1].y);
+          ctx.stroke();
+          for (const p of measurePts) {
+            ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 5, 0, Math.PI*2);
+            ctx.fill();
+          }
+        }
+      }
+
+      // load background image
+      imageLoader.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          const img = new Image();
+          img.onload = function() {
+            bgImage = img;
+            clearCanvas();
+            ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+          };
+          img.src = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      canvas.addEventListener('click', function(e) {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        if (measuring) {
+          if (measurePts.length < 2) {
+            measurePts.push({x,y});
+            redraw();
+          }
+          return;
+        }
+
+        if (!drawing) return;
+        vertices.push({x,y});
+        redraw();
+      });
+
+      startDraw.addEventListener('click', function() {
+        drawing = !drawing;
+        startDraw.textContent = drawing ? 'Stop Drawing' : 'Start Drawing';
+      });
+
+      finishPoly.addEventListener('click', function() {
+        drawing = false;
+        startDraw.textContent = 'Start Drawing';
+        redraw();
+      });
+
+      clearPoly.addEventListener('click', function() {
+        vertices = [];
+        redraw();
+      });
+
+      measureBtn.addEventListener('click', function() {
+        measuring = true;
+        measurePts = [];
+        scaleInfo.textContent = 'Click two points on the picture, then enter the real-world distance and press "Set Scale".';
+        redraw();
+      });
+
+      clearMeasure.addEventListener('click', function() {
+        measuring = false;
+        measurePts = [];
+        measuredFeet.value = '';
+        pixelsPerFoot = null;
+        scaleInfo.textContent = 'Scale: not set';
+        redraw();
+      });
+
+      setScaleBtn.addEventListener('click', function() {
+        if (measurePts.length < 2) {
+          alert('Please click two points on the image first (Measure Two Points).');
+          return;
+        }
+        const realFeet = parseFloat(measuredFeet.value);
+        if (!realFeet || realFeet <= 0) {
+          alert('Please enter a positive measured distance in feet.');
+          return;
+        }
+        const dx = measurePts[0].x - measurePts[1].x;
+        const dy = measurePts[0].y - measurePts[1].y;
+        const pixelDist = Math.sqrt(dx*dx + dy*dy);
+        pixelsPerFoot = pixelDist / realFeet;
+        measuring = false;
+        scaleInfo.textContent = `Scale set: ${pixelsPerFoot.toFixed(2)} pixels / foot`;
+        redraw();
+      });
+
+      function polygonAreaPixels(pts) {
+        if (!pts || pts.length < 3) return 0;
+        let sum = 0;
+        for (let i = 0; i < pts.length; i++) {
+          const j = (i+1) % pts.length;
+          sum += pts[i].x * pts[j].y - pts[j].x * pts[i].y;
+        }
+        return Math.abs(sum) / 2;
+      }
+
+      function regionDefaults(regionKey) {
+        const map = {
+          northern_europe: {soilCapacity: 3000, frostDepthFt: 4.5},
+          northeast_us: {soilCapacity: 2500, frostDepthFt: 4.0},
+          midwest_us: {soilCapacity: 2200, frostDepthFt: 3.5},
+          southeast_us: {soilCapacity: 1800, frostDepthFt: 1.0},
+          tropical: {soilCapacity: 2000, frostDepthFt: 0},
+          rocky: {soilCapacity: 10000, frostDepthFt: 0},
+        };
+        return map[regionKey] || map.tropical;
+      }
+
+      function soilCapacityLookup(soilKey) {
+        const map = {
+          soft_clay: 1000,
+          medium_sand: 2000,
+          stiff_clay: 3000,
+          dense_sand: 4000,
+          bedrock: 10000,
+        };
+        return map[soilKey] || null;
+      }
+
+      function buildingLiveLoad(useKey) {
+        const map = {
+          residential: 40,
+          office: 50,
+          parking: 250,
+          industrial: 100,
+        };
+        return map[useKey] || 40;
+      }
+
+      function suggestSlabThickness(bearingPressure, allowable) {
+        const usage = bearingPressure / allowable;
+        if (usage < 0.25) return {inch: 4, note: 'Typical 4\" slab-on-grade may be sufficient for light residential loads.'};
+        if (usage < 0.50) return {inch: 6, note: '6\" slab recommended for moderate loads.'};
+        if (usage < 0.75) return {inch: 8, note: '8\" slab advisable; consider reinforcement and/or wider footings.'};
+        if (usage < 1.0) return {inch: 10, note: '10\" slab and engineered foundation recommended.'};
+        return {inch: null, note: 'Estimated bearing demand exceeds typical soil capacity — engineered foundation required (deepen footings, widen footing area, use piles).'};
+      }
+
+      computeBtn.addEventListener('click', function() {
+        let areaSqFt = 0;
+        if (manualArea.value && parseFloat(manualArea.value) > 0) {
+          areaSqFt = parseFloat(manualArea.value);
+        } else if (vertices.length >= 3) {
+          const areaPixels = polygonAreaPixels(vertices);
+          if (!pixelsPerFoot) {
+            alert('You drew a polygon but scale is not set. Either set the scale (measure two points) or enter square footage manually.');
+            return;
+          }
+          const sqft = areaPixels / (pixelsPerFoot*pixelsPerFoot);
+          areaSqFt = sqft;
+        } else {
+          alert('Please draw a polygon or enter square footage per floor.');
+          return;
+        }
+
+        const floors = Math.max(1, parseInt(floorsInput.value) || 1);
+        const deadLoad = Math.max(0, parseFloat(deadLoadInput.value) || 15);
+        const liveLoad = Math.max(0, parseFloat(liveLoadInput.value) || buildingLiveLoad(buildingUse.value));
+        const totalLoadPerFloor = deadLoad + liveLoad;
+        const bearingPressure = floors * totalLoadPerFloor;
+
+        let defaults = regionDefaults(region.value);
+        let allowable = defaults.soilCapacity;
+        if (soil.value) {
+          const override = soilCapacityLookup(soil.value);
+          if (override) allowable = override;
+        }
+
+        const frostDepthFt = defaults.frostDepthFt || 0;
+        const slabSuggestion = suggestSlabThickness(bearingPressure, allowable);
+        let minFootingDepthFt = Math.max(0.5, frostDepthFt > 0 ? frostDepthFt + 0.5 : 0.5);
+        if (frostDepthFt === 0) minFootingDepthFt = 0.5;
+        const usagePct = (bearingPressure / allowable) * 100;
+
+        const lines = [];
+        lines.push('<p><strong>Footprint area (ft²):</strong> ' + areaSqFt.toFixed(1) + '</p>');
+        lines.push('<p><strong>Number of floors:</strong> ' + floors + '</p>');
+        lines.push('<p><strong>Assumed loads per floor:</strong> dead ' + deadLoad.toFixed(1) + ' psf, live ' + liveLoad.toFixed(1) + ' psf (total ' + totalLoadPerFloor.toFixed(1) + ' psf)</p>');
+        lines.push('<p><strong>Estimated uniform bearing pressure:</strong> ' + bearingPressure.toFixed(0) + ' psf</p>');
+        lines.push('<p><strong>Assumed allowable soil bearing capacity (approx):</strong> ' + allowable.toFixed(0) + ' psf</p>');
+        lines.push('<p><strong>Capacity usage:</strong> ' + usagePct.toFixed(1) + '% of allowable</p>');
+        if (slabSuggestion.inch) {
+          lines.push('<p><strong>Suggested slab thickness (rule-of-thumb):</strong> ' + slabSuggestion.inch + '" — ' + slabSuggestion.note + '</p>');
+        } else {
+          lines.push('<p><strong>Suggested slab thickness:</strong> No simple slab will safely support this load on the assumed soil. ' + slabSuggestion.note + '</p>');
+        }
+        lines.push('<p><strong>Suggested minimum footing depth:</strong> ' + minFootingDepthFt.toFixed(2) + ' ft below finished grade (based on regional frost depth). This is a planning-level suggestion only.</p>');
+
+        lines.push('<h4>What this means</h4>');
+        lines.push('<ul>' +
+          '<li>If capacity usage is under ~50% the site may be suitable for conventional slab-on-grade with modest reinforcement (per local code).</li>' +
+          '<li>If usage is above ~50% plan for thicker slabs, reinforced foundations, wider footings or a geotechnical evaluation.</li>' +
+          '<li>If usage is >=100% you will likely need engineered foundations (deeper footings, piles, or soil improvement).</li>' +
+        '</ul>');
+
+        lines.push('<h4>Limitations & Next steps</h4>');
+        lines.push('<ul>' +
+          '<li>This is a simplified, conservative calculation for early-stage planning only. It ignores columns, strip footings, concentrated loads, groundwater, slope, seismic, and many other factors.</li>' +
+          '<li>Before construction, hire a licensed geotechnical and structural engineer to perform site-specific soil testing (borings) and structural design.</li>' +
+          '<li>Consider local building codes for frost protection, minimum reinforcement, and slab design.</li>' +
+        '</ul>');
+
+        resultsArea.innerHTML = lines.join('\\n');
+      });
+
+      resetBtn.addEventListener('click', function() {
+        vertices = [];
+        measurePts = [];
+        pixelsPerFoot = null;
+        manualArea.value = '';
+        measuredFeet.value = '';
+        scaleInfo.textContent = 'Scale: not set';
+        floorsInput.value = 2;
+        buildingUse.value = 'residential';
+        region.value = 'northern_europe';
+        soil.value = '';
+        deadLoadInput.value = 15;
+        liveLoadInput.value = 40;
+        resultsArea.innerHTML = '<p>No calculation yet. Draw a polygon or enter square footage and click "Compute Estimate".</p>';
+        bgImage = null;
+        imageLoader.value = '';
+        clearCanvas();
+      });
+
+      // initialize
+      clearCanvas();
+    })();
+  </script>
+</body>
+</html>
