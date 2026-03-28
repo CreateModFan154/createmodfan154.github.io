@@ -15,11 +15,11 @@
     }
 
     :root {
-      --background_color: #1f1f1f;
-      --surface_color: #ffffff;
-      --text_color: #000000;
+      --background_color: #0a0a0a;
+      --surface_color: #1f1f1f;
+      --text_color: #ffffff;
       --primary_action_color: #ea9547;
-      --secondary_action_color: #ffffff;
+      --secondary_action_color: #1f1f1f;
     }
 
     html, body {
@@ -28,17 +28,18 @@
     }
 
     body {
-      font-family: Georgia, serif;
+      font-family: "Minecraft Seven", "Arial", sans-serif;
       background:
-        linear-gradient(180deg, rgba(245,158,11,0.08), rgba(20,20,20,0) 26%),
-        linear-gradient(135deg, rgba(127,176,105,0.08) 0%, rgba(20,20,20,0) 45%),
-        linear-gradient(0deg, rgba(0,0,0,0.18), rgba(0,0,0,0.18)),
+        linear-gradient(45deg, rgba(234,149,71,0.04) 0%, transparent 50%),
+        linear-gradient(-45deg, rgba(234,149,71,0.04) 0%, transparent 50%),
+        repeating-linear-gradient(0deg, rgba(234,149,71,0.02) 0px, transparent 1px, transparent 2px, rgba(234,149,71,0.02) 3px),
+        repeating-linear-gradient(90deg, rgba(234,149,71,0.02) 0px, transparent 1px, transparent 2px, rgba(234,149,71,0.02) 3px),
         var(--background_color);
       color: var(--text_color);
     }
 
     .minecraft-font {
-      font-family: "Minecraft Seven", "Courier New", monospace;
+      font-family: "Minecraft Seven", "Arial", sans-serif;
       letter-spacing: 0.06em;
     }
 
@@ -48,9 +49,9 @@
       width: 100%;
       overflow: hidden;
       background-image:
-        linear-gradient(rgba(245,158,11,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(245,158,11,0.06) 1px, transparent 1px);
-      background-size: 36px 36px;
+        linear-gradient(rgba(234,149,71,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(234,149,71,0.08) 1px, transparent 1px);
+      background-size: 40px 40px;
     }
 
     .page-shell::before,
@@ -63,9 +64,9 @@
 
     .page-shell::before {
       background:
-        radial-gradient(circle at 15% 20%, rgba(245,158,11,0.12), transparent 20%),
-        radial-gradient(circle at 85% 15%, rgba(127,176,105,0.10), transparent 18%),
-        radial-gradient(circle at 50% 100%, rgba(245,158,11,0.08), transparent 28%);
+        radial-gradient(circle at 15% 20%, rgba(234,149,71,0.15), transparent 25%),
+        radial-gradient(circle at 85% 15%, rgba(234,149,71,0.12), transparent 22%),
+        radial-gradient(circle at 50% 100%, rgba(234,149,71,0.10), transparent 32%);
     }
 
     .page-shell::after {
@@ -100,7 +101,7 @@
 
     .ore-badge {
       background: var(--secondary_action_color);
-      color: var(--background_color);
+      color: #ffffff;
       border: 2px solid var(--text_color);
       box-shadow: 3px 3px 0 rgba(0,0,0,0.35);
     }
@@ -121,7 +122,7 @@
 
     .support-link {
       background: var(--primary_action_color);
-      color: var(--background_color);
+      color: #1f1f1f;
       border: 2px solid rgba(20,20,20,0.9);
       box-shadow: 4px 4px 0 rgba(0,0,0,0.35);
       transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
@@ -141,8 +142,8 @@
 
     .support-link.ghost {
       background: transparent;
-      color: var(--text_color);
-      border-color: var(--text_color);
+      color: #ffffff;
+      border-color: #ffffff;
       box-shadow: 4px 4px 0 rgba(0,0,0,0.28);
     }
 
@@ -210,7 +211,7 @@
     }
 
     .focus-ring:focus-visible {
-      outline: 3px solid var(--text_color);
+      outline: 3px solid #ffffff;
       outline-offset: 3px;
     }
   </style>
@@ -224,22 +225,21 @@
      <section class="block-panel fade-up overflow-hidden rounded-none px-5 py-6 sm:px-8 sm:py-8 lg:px-10">
       <div class="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
        <div class="space-y-6">
-        <div class="inline-flex ore-badge minecraft-font items-center gap-2 px-3 py-2 text-xs sm:text-sm">
-         <i data-lucide="pickaxe" class="h-4 w-4"></i> <span>Factory blocks meet survival building</span>
+        <div class="inline-flex ore-badge minecraft-font items-center gap-2 px-3 py-2 text-xs sm:text-sm"><i data-lucide="pickaxe" class="h-4 w-4"></i> <span>Factory blocks meet survival building</span>
         </div>
         <div class="space-y-3">
          <p id="subtitleText" class="fade-up delay-1 minecraft-font text-sm uppercase tracking-[0.25em] tiny-note">ARR Modpack by CreateModFan154</p>
-         <h1 id="mainTitle" class="pixel-title minecraft-font fade-up delay-2 text-3xl leading-tight sm:text-5xl lg:text-6xl">Satisfactory Craft</h1>
+         <div class="fade-up delay-2"><img src="././assets/satisfactorycraft_title.png" alt="Satisfactory Craft" class="h-auto w-full max-w-md" loading="lazy" onerror="console.error('Title image failed to load:', this.src); this.style.display='none'; document.getElementById('mainTitleFallback').style.display='block';">
+          <h1 id="mainTitleFallback" class="pixel-title minecraft-font text-3xl leading-tight sm:text-5xl lg:text-6xl" style="display:none;">Satisfactory Craft</h1>
+         </div>
          <p class="fade-up delay-3 max-w-2xl text-base leading-7 sm:text-lg">An industrial sandbox fan page blending the chunky charm of block-building adventure with the warm steel-and-amber energy of giant factory worlds.</p>
         </div>
-        <div class="fade-up delay-4 flex flex-wrap gap-3">
-         <a href="#support" class="support-link focus-ring minecraft-font inline-flex items-center gap-2 px-4 py-3 text-sm no-underline sm:text-base"> <i data-lucide="external-link" class="h-4 w-4"></i> <span>Support the inspiration</span> </a> <a href="#credits" class="support-link secondary focus-ring minecraft-font inline-flex items-center gap-2 px-4 py-3 text-sm no-underline sm:text-base"> <i data-lucide="users" class="h-4 w-4"></i> <span>View credits</span> </a>
+        <div class="fade-up delay-4 flex flex-wrap gap-3"><a href="#support" class="support-link focus-ring minecraft-font inline-flex items-center gap-2 px-4 py-3 text-sm no-underline sm:text-base"> <i data-lucide="external-link" class="h-4 w-4"></i> <span>Support the inspiration</span> </a> <a href="#credits" class="support-link secondary focus-ring minecraft-font inline-flex items-center gap-2 px-4 py-3 text-sm no-underline sm:text-base"> <i data-lucide="users" class="h-4 w-4"></i> <span>View credits</span> </a>
         </div>
        </div>
        <div class="fade-up delay-2">
         <div class="logo-block p-4 sm:p-5">
-         <div class="mb-4 flex items-center justify-between">
-          <span class="minecraft-font text-sm sm:text-base">SATISFACTORYCRAFT.EXE</span> <span class="minecraft-font tiny-note text-xs">FAN PROJECT</span>
+         <div class="mb-4 flex items-center justify-between"><span class="minecraft-font text-sm sm:text-base">SATISFACTORYCRAFT.EXE</span> <span class="minecraft-font tiny-note text-xs">FAN PROJECT</span>
          </div>
          <div class="logo-grid rounded-none">
           <div class="voxel"></div>
@@ -331,8 +331,7 @@
       <div class="divider-bar my-8"></div>
       <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
        <article id="credits" class="chunk-card p-5">
-        <div class="mb-3 inline-flex items-center gap-2 minecraft-font text-sm">
-         <i data-lucide="users" class="h-4 w-4"></i>
+        <div class="mb-3 inline-flex items-center gap-2 minecraft-font text-sm"><i data-lucide="users" class="h-4 w-4"></i>
          <h2 id="creditsTitle" class="text-base sm:text-lg">Credits</h2>
         </div>
         <p class="mb-3 text-sm leading-6 tiny-note">Special thanks to:</p>
@@ -343,15 +342,13 @@
         </ul>
        </article>
        <article class="chunk-card p-5">
-        <div class="mb-3 inline-flex items-center gap-2 minecraft-font text-sm">
-         <i data-lucide="package" class="h-4 w-4"></i>
+        <div class="mb-3 inline-flex items-center gap-2 minecraft-font text-sm"><i data-lucide="package" class="h-4 w-4"></i>
          <h2 class="text-base sm:text-lg">Modpack Theme</h2>
         </div>
         <p class="text-sm leading-6 tiny-note">A build focused world of gears, conveyors, automation, mining, and large-scale engineering with a handcrafted voxel flavor.</p>
        </article>
        <article class="chunk-card p-5">
-        <div class="mb-3 inline-flex items-center gap-2 minecraft-font text-sm">
-         <i data-lucide="scroll-text" class="h-4 w-4"></i>
+        <div class="mb-3 inline-flex items-center gap-2 minecraft-font text-sm"><i data-lucide="scroll-text" class="h-4 w-4"></i>
          <h2 id="licensesTitle" class="text-base sm:text-lg">Licenses</h2>
         </div>
         <ul class="space-y-3 text-sm leading-6">
@@ -360,8 +357,7 @@
         </ul>
        </article>
        <article class="chunk-card p-5">
-        <div class="mb-3 inline-flex items-center gap-2 minecraft-font text-sm">
-         <i data-lucide="shield-alert" class="h-4 w-4"></i>
+        <div class="mb-3 inline-flex items-center gap-2 minecraft-font text-sm"><i data-lucide="shield-alert" class="h-4 w-4"></i>
          <h2 class="text-base sm:text-lg">Fan Disclaimer</h2>
         </div>
         <p class="text-sm leading-6 tiny-note">This is a community-made fan presentation and is not official, endorsed, or connected to the original game creators.</p>
@@ -370,8 +366,7 @@
       <div class="divider-bar my-8"></div>
       <section id="support" class="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
        <div class="space-y-3">
-        <div class="inline-flex items-center gap-2 minecraft-font text-sm">
-         <i data-lucide="heart-handshake" class="h-4 w-4"></i>
+        <div class="inline-flex items-center gap-2 minecraft-font text-sm"><i data-lucide="heart-handshake" class="h-4 w-4"></i>
          <h2 id="supportTitle" class="text-base sm:text-lg">Support the Original Game</h2>
         </div>
         <p class="max-w-3xl text-sm leading-7 sm:text-base">If you like this style of gameplay, consider supporting the developers of the game that inspired it.</p>
@@ -380,14 +375,13 @@
         OPEN LINKS IN A NEW TAB
        </div>
       </section>
-      <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-       <a href="https://www.satisfactorygame.com/" target="_blank" rel="noopener noreferrer" class="support-link focus-ring minecraft-font inline-flex items-center justify-center gap-2 px-4 py-4 text-center text-xs no-underline sm:text-sm"> <i data-lucide="globe" class="h-4 w-4"></i> Official Website </a> <a href="https://store.steampowered.com/app/526870/Satisfactory/" target="_blank" rel="noopener noreferrer" class="support-link secondary focus-ring minecraft-font inline-flex items-center justify-center gap-2 px-4 py-4 text-center text-xs no-underline sm:text-sm"> <i data-lucide="gamepad-2" class="h-4 w-4"></i> Steam Store </a> <a href="https://store.epicgames.com/en-US/p/satisfactory" target="_blank" rel="noopener noreferrer" class="support-link focus-ring minecraft-font inline-flex items-center justify-center gap-2 px-4 py-4 text-center text-xs no-underline sm:text-sm"> <i data-lucide="rocket" class="h-4 w-4"></i> Epic Games Store </a> <a href="https://coffeestain.com/game/satisfactory/" target="_blank" rel="noopener noreferrer" class="support-link ghost focus-ring minecraft-font inline-flex items-center justify-center gap-2 px-4 py-4 text-center text-xs no-underline sm:text-sm"> <i data-lucide="building-2" class="h-4 w-4"></i> Coffee Stain Studios </a> <a href="https://discord.com/invite/satisfactory" target="_blank" rel="noopener noreferrer" class="support-link ghost focus-ring minecraft-font inline-flex items-center justify-center gap-2 px-4 py-4 text-center text-xs no-underline sm:text-sm"> <i data-lucide="messages-square" class="h-4 w-4"></i> Discord </a>
+      <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-5"><a href="https://www.satisfactorygame.com/" target="_blank" rel="noopener noreferrer" class="support-link focus-ring minecraft-font inline-flex items-center justify-center gap-2 px-4 py-4 text-center text-xs no-underline sm:text-sm"> <i data-lucide="globe" class="h-4 w-4"></i> Official Website </a> <a href="https://store.steampowered.com/app/526870/Satisfactory/" target="_blank" rel="noopener noreferrer" class="support-link secondary focus-ring minecraft-font inline-flex items-center justify-center gap-2 px-4 py-4 text-center text-xs no-underline sm:text-sm"> <i data-lucide="gamepad-2" class="h-4 w-4"></i> Steam Store </a> <a href="https://store.epicgames.com/en-US/p/satisfactory" target="_blank" rel="noopener noreferrer" class="support-link focus-ring minecraft-font inline-flex items-center justify-center gap-2 px-4 py-4 text-center text-xs no-underline sm:text-sm"> <i data-lucide="rocket" class="h-4 w-4"></i> Epic Games Store </a> <a href="https://coffeestain.com/game/satisfactory/" target="_blank" rel="noopener noreferrer" class="support-link ghost focus-ring minecraft-font inline-flex items-center justify-center gap-2 px-4 py-4 text-center text-xs no-underline sm:text-sm"> <i data-lucide="building-2" class="h-4 w-4"></i> Coffee Stain Studios </a> <a href="https://discord.com/invite/satisfactory" target="_blank" rel="noopener noreferrer" class="support-link ghost focus-ring minecraft-font inline-flex items-center justify-center gap-2 px-4 py-4 text-center text-xs no-underline sm:text-sm"> <i data-lucide="messages-square" class="h-4 w-4"></i> Discord </a>
       </div>
       <footer class="mt-8 border-t-2 border-[rgba(244,230,190,0.2)] pt-6 text-center">
        <p class="minecraft-font text-xs leading-7 tiny-note sm:text-sm">NOT AN OFFICIAL SATISFACTORY PRODUCT.<br>
-        NOT APPROVED BY OR ASSOCIATED WITH COFFEE STAIN STUDIOS OR SATISFACTORY.<br>
-        NOT AN OFFICIAL MINECRAFT PRODUCT.<br>
-        NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.<br><span id="copyrightText">© 2026 CreateModFan154. ALL RIGHTS RESERVED.</span></p>
+         NOT APPROVED BY OR ASSOCIATED WITH COFFEE STAIN STUDIOS OR SATISFACTORY.<br>
+         NOT AN OFFICIAL MINECRAFT PRODUCT.<br>
+         NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.<br><span id="copyrightText">© 2026 CreateModFan154. ALL RIGHTS RESERVED.</span></p>
       </footer>
      </section>
     </div>
@@ -395,11 +389,11 @@
   </main>
   <script>
     const defaultConfig = {
-      background_color: "#1f1f1f",
-      surface_color: "#ffffff",
-      text_color: "#A4B0BB",
+      background_color: "#ffffff",
+      surface_color: "#1f1f1f",
+      text_color: "#ffffff",
       primary_action_color: "#ea9547",
-      secondary_action_color: "#ffffff",
+      secondary_action_color: "#1f1f1f",
       font_family: "Minecraft Seven",
       font_size: 16,
       main_title: "Satisfactory Craft",
@@ -412,7 +406,7 @@
       copyright_text: "© 2026 CreateModFan154. ALL RIGHTS RESERVED."
     };
 
-    const mainTitleEl = document.getElementById("mainTitle");
+    const mainTitleEl = document.getElementById("mainTitleFallback");
     const subtitleTextEl = document.getElementById("subtitleText");
     const creditsTitleEl = document.getElementById("creditsTitle");
     const licensesTitleEl = document.getElementById("licensesTitle");
@@ -429,11 +423,10 @@
       root.style.setProperty("--primary_action_color", merged.primary_action_color);
       root.style.setProperty("--secondary_action_color", merged.secondary_action_color);
 
-      const displayFont = `${merged.font_family}, "Courier New", monospace`;
-      const bodyFont = `${merged.font_family}, Georgia, serif`;
+        displayFont = `${merged.font_family}, "Arial", sans-serif`;
       const baseSize = Number(merged.font_size) || 16;
 
-      document.body.style.fontFamily = bodyFont;
+      document.body.style.fontFamily = displayFont;
 
       mainTitleEl.textContent = merged.main_title;
       subtitleTextEl.textContent = merged.subtitle_text;
@@ -527,5 +520,5 @@
       window.lucide.createIcons();
     }
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e385a92110dca0c',t:'MTc3NDcxODkzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e38647fa720ca0c',t:'MTc3NDcxOTMzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
