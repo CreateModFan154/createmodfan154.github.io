@@ -1,1 +1,531 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Satisfactory Craft Fan Page</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <style>
+    @font-face {
+      font-family: "Minecraft Seven";
+      src: url("././assets/minecraft-seven.otf") format("opentype");
+      font-display: swap;
+    }
 
+    :root {
+      --background_color: #1f1f1f;
+      --surface_color: #ffffff;
+      --text_color: #A4B0BB;
+      --primary_action_color: #ea9547;
+      --secondary_action_color: #ffffff;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      font-family: Georgia, serif;
+      background:
+        linear-gradient(180deg, rgba(245,158,11,0.08), rgba(20,20,20,0) 26%),
+        linear-gradient(135deg, rgba(127,176,105,0.08) 0%, rgba(20,20,20,0) 45%),
+        linear-gradient(0deg, rgba(0,0,0,0.18), rgba(0,0,0,0.18)),
+        var(--background_color);
+      color: var(--text_color);
+    }
+
+    .minecraft-font {
+      font-family: "Minecraft Seven", "Courier New", monospace;
+      letter-spacing: 0.06em;
+    }
+
+    .page-shell {
+      position: relative;
+      min-height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background-image:
+        linear-gradient(rgba(245,158,11,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245,158,11,0.06) 1px, transparent 1px);
+      background-size: 36px 36px;
+    }
+
+    .page-shell::before,
+    .page-shell::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .page-shell::before {
+      background:
+        radial-gradient(circle at 15% 20%, rgba(245,158,11,0.12), transparent 20%),
+        radial-gradient(circle at 85% 15%, rgba(127,176,105,0.10), transparent 18%),
+        radial-gradient(circle at 50% 100%, rgba(245,158,11,0.08), transparent 28%);
+    }
+
+    .page-shell::after {
+      background:
+        linear-gradient(180deg, rgba(20,20,20,0) 0%, rgba(20,20,20,0.18) 100%);
+    }
+
+    .block-panel {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.12)),
+        var(--surface_color);
+      border: 3px solid var(--primary_action_color);
+      box-shadow:
+        0 0 0 3px rgba(0,0,0,0.35),
+        0 18px 40px rgba(0,0,0,0.38);
+      position: relative;
+    }
+
+    .block-panel::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border: 1px solid rgba(244,230,190,0.10);
+      pointer-events: none;
+    }
+
+    .pixel-title {
+      text-shadow:
+        3px 3px 0 rgba(0,0,0,0.45),
+        0 0 24px rgba(245,158,11,0.18);
+    }
+
+    .ore-badge {
+      background: var(--secondary_action_color);
+      color: var(--background_color);
+      border: 2px solid var(--text_color);
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.35);
+    }
+
+    .chunk-card {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.18)),
+        rgba(20,20,20,0.38);
+      border: 2px solid rgba(244,230,190,0.18);
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .chunk-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary_action_color);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+    }
+
+    .support-link {
+      background: var(--primary_action_color);
+      color: var(--background_color);
+      border: 2px solid rgba(20,20,20,0.9);
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.35);
+      transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+    }
+
+    .support-link:hover,
+    .support-link:focus-visible {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 rgba(0,0,0,0.38);
+      filter: brightness(1.03);
+      outline: none;
+    }
+
+    .support-link.secondary {
+      background: var(--secondary_action_color);
+    }
+
+    .support-link.ghost {
+      background: transparent;
+      color: var(--text_color);
+      border-color: var(--text_color);
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.28);
+    }
+
+    .divider-bar {
+      height: 12px;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          var(--primary_action_color) 0 24px,
+          var(--background_color) 24px 36px
+        );
+      border: 2px solid rgba(244,230,190,0.22);
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 700ms ease forwards;
+    }
+
+    .delay-1 { animation-delay: 80ms; }
+    .delay-2 { animation-delay: 160ms; }
+    .delay-3 { animation-delay: 240ms; }
+    .delay-4 { animation-delay: 320ms; }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .tiny-note {
+      color: var(--text_color);
+      opacity: 0.82;
+    }
+
+    .logo-block {
+      width: 100%;
+      border: 3px solid var(--text_color);
+      background:
+        linear-gradient(180deg, rgba(127,176,105,0.16), rgba(0,0,0,0.16)),
+        linear-gradient(90deg, rgba(245,158,11,0.12), rgba(20,20,20,0.18));
+      box-shadow: inset 0 0 0 3px rgba(0,0,0,0.25);
+    }
+
+    .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 4px;
+    }
+
+    .voxel {
+      aspect-ratio: 1 / 1;
+      background: rgba(244,230,190,0.12);
+      border: 1px solid rgba(0,0,0,0.18);
+    }
+
+    .voxel.glow { background: var(--primary_action_color); }
+    .voxel.green { background: var(--secondary_action_color); }
+    .voxel.light { background: var(--text_color); }
+
+    .list-bullet {
+      color: var(--primary_action_color);
+    }
+
+    .focus-ring:focus-visible {
+      outline: 3px solid var(--text_color);
+      outline-offset: 3px;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <main class="page-shell h-full w-full overflow-auto">
+   <div class="relative z-10 w-full px-4 py-6 sm:px-6 lg:px-8">
+    <div class="mx-auto w-full max-w-6xl">
+     <section class="block-panel fade-up overflow-hidden rounded-none px-5 py-6 sm:px-8 sm:py-8 lg:px-10">
+      <div class="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+       <div class="space-y-6">
+        <div class="inline-flex ore-badge minecraft-font items-center gap-2 px-3 py-2 text-xs sm:text-sm">
+         <i data-lucide="pickaxe" class="h-4 w-4"></i> <span>Factory blocks meet survival building</span>
+        </div>
+        <div class="space-y-3">
+         <p id="subtitleText" class="fade-up delay-1 minecraft-font text-sm uppercase tracking-[0.25em] tiny-note">ARR Modpack by CreateModFan154</p>
+         <h1 id="mainTitle" class="pixel-title minecraft-font fade-up delay-2 text-3xl leading-tight sm:text-5xl lg:text-6xl">Satisfactory Craft</h1>
+         <p class="fade-up delay-3 max-w-2xl text-base leading-7 sm:text-lg">An industrial sandbox fan page blending the chunky charm of block-building adventure with the warm steel-and-amber energy of giant factory worlds.</p>
+        </div>
+        <div class="fade-up delay-4 flex flex-wrap gap-3">
+         <a href="#support" class="support-link focus-ring minecraft-font inline-flex items-center gap-2 px-4 py-3 text-sm no-underline sm:text-base"> <i data-lucide="external-link" class="h-4 w-4"></i> <span>Support the inspiration</span> </a> <a href="#credits" class="support-link secondary focus-ring minecraft-font inline-flex items-center gap-2 px-4 py-3 text-sm no-underline sm:text-base"> <i data-lucide="users" class="h-4 w-4"></i> <span>View credits</span> </a>
+        </div>
+       </div>
+       <div class="fade-up delay-2">
+        <div class="logo-block p-4 sm:p-5">
+         <div class="mb-4 flex items-center justify-between">
+          <span class="minecraft-font text-sm sm:text-base">SATISFACTORYCRAFT.EXE</span> <span class="minecraft-font tiny-note text-xs">FAN PROJECT</span>
+         </div>
+         <div class="logo-grid rounded-none">
+          <div class="voxel"></div>
+          <div class="voxel glow"></div>
+          <div class="voxel glow"></div>
+          <div class="voxel light"></div>
+          <div class="voxel"></div>
+          <div class="voxel"></div>
+          <div class="voxel green"></div>
+          <div class="voxel green"></div>
+          <div class="voxel"></div>
+          <div class="voxel light"></div>
+          <div class="voxel glow"></div>
+          <div class="voxel"></div>
+          <div class="voxel green"></div>
+          <div class="voxel green"></div>
+          <div class="voxel"></div>
+          <div class="voxel light"></div>
+          <div class="voxel glow"></div>
+          <div class="voxel glow"></div>
+          <div class="voxel"></div>
+          <div class="voxel light"></div>
+          <div class="voxel green"></div>
+          <div class="voxel"></div>
+          <div class="voxel glow"></div>
+          <div class="voxel light"></div>
+          <div class="voxel"></div>
+          <div class="voxel light"></div>
+          <div class="voxel green"></div>
+          <div class="voxel"></div>
+          <div class="voxel"></div>
+          <div class="voxel glow"></div>
+          <div class="voxel light"></div>
+          <div class="voxel"></div>
+          <div class="voxel green"></div>
+          <div class="voxel green"></div>
+          <div class="voxel"></div>
+          <div class="voxel"></div>
+          <div class="voxel glow"></div>
+          <div class="voxel"></div>
+          <div class="voxel light"></div>
+          <div class="voxel green"></div>
+          <div class="voxel"></div>
+          <div class="voxel"></div>
+          <div class="voxel glow"></div>
+          <div class="voxel light"></div>
+          <div class="voxel"></div>
+          <div class="voxel"></div>
+          <div class="voxel green"></div>
+          <div class="voxel glow"></div>
+          <div class="voxel"></div>
+          <div class="voxel glow"></div>
+          <div class="voxel"></div>
+          <div class="voxel"></div>
+          <div class="voxel green"></div>
+          <div class="voxel light"></div>
+          <div class="voxel"></div>
+          <div class="voxel glow"></div>
+          <div class="voxel light"></div>
+          <div class="voxel"></div>
+          <div class="voxel"></div>
+          <div class="voxel green"></div>
+          <div class="voxel light"></div>
+          <div class="voxel"></div>
+          <div class="voxel green"></div>
+          <div class="voxel glow"></div>
+          <div class="voxel"></div>
+          <div class="voxel"></div>
+          <div class="voxel light"></div>
+          <div class="voxel green"></div>
+          <div class="voxel"></div>
+          <div class="voxel glow"></div>
+          <div class="voxel"></div>
+          <div class="voxel light"></div>
+         </div>
+         <div class="mt-4 grid gap-3 sm:grid-cols-2">
+          <div class="chunk-card p-3">
+           <p class="minecraft-font text-xs tiny-note">STYLE</p>
+           <p class="mt-1 text-sm">Blocky, gritty, and industrial.</p>
+          </div>
+          <div class="chunk-card p-3">
+           <p class="minecraft-font text-xs tiny-note">MOOD</p>
+           <p class="mt-1 text-sm">Factory glow meets mining adventure.</p>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="divider-bar my-8"></div>
+      <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+       <article id="credits" class="chunk-card p-5">
+        <div class="mb-3 inline-flex items-center gap-2 minecraft-font text-sm">
+         <i data-lucide="users" class="h-4 w-4"></i>
+         <h2 id="creditsTitle" class="text-base sm:text-lg">Credits</h2>
+        </div>
+        <p class="mb-3 text-sm leading-6 tiny-note">Special thanks to:</p>
+        <ul class="space-y-3 text-sm leading-6">
+         <li class="flex gap-2"><span class="list-bullet minecraft-font">■</span><span>Creators of Create Mod</span></li>
+         <li class="flex gap-2"><span class="list-bullet minecraft-font">■</span><span>Community contributors and testers</span></li>
+         <li class="flex gap-2"><span class="list-bullet minecraft-font">■</span><span>Fan community inspiration from both Minecraft and Satisfactory</span></li>
+        </ul>
+       </article>
+       <article class="chunk-card p-5">
+        <div class="mb-3 inline-flex items-center gap-2 minecraft-font text-sm">
+         <i data-lucide="package" class="h-4 w-4"></i>
+         <h2 class="text-base sm:text-lg">Modpack Theme</h2>
+        </div>
+        <p class="text-sm leading-6 tiny-note">A build focused world of gears, conveyors, automation, mining, and large-scale engineering with a handcrafted voxel flavor.</p>
+       </article>
+       <article class="chunk-card p-5">
+        <div class="mb-3 inline-flex items-center gap-2 minecraft-font text-sm">
+         <i data-lucide="scroll-text" class="h-4 w-4"></i>
+         <h2 id="licensesTitle" class="text-base sm:text-lg">Licenses</h2>
+        </div>
+        <ul class="space-y-3 text-sm leading-6">
+         <li class="flex gap-2"><span class="list-bullet minecraft-font">■</span><span>Create Mod - © Simibubi, under MIT License</span></li>
+         <li class="flex gap-2"><span class="list-bullet minecraft-font">■</span><span>Other included mods - see their respective license files</span></li>
+        </ul>
+       </article>
+       <article class="chunk-card p-5">
+        <div class="mb-3 inline-flex items-center gap-2 minecraft-font text-sm">
+         <i data-lucide="shield-alert" class="h-4 w-4"></i>
+         <h2 class="text-base sm:text-lg">Fan Disclaimer</h2>
+        </div>
+        <p class="text-sm leading-6 tiny-note">This is a community-made fan presentation and is not official, endorsed, or connected to the original game creators.</p>
+       </article>
+      </div>
+      <div class="divider-bar my-8"></div>
+      <section id="support" class="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
+       <div class="space-y-3">
+        <div class="inline-flex items-center gap-2 minecraft-font text-sm">
+         <i data-lucide="heart-handshake" class="h-4 w-4"></i>
+         <h2 id="supportTitle" class="text-base sm:text-lg">Support the Original Game</h2>
+        </div>
+        <p class="max-w-3xl text-sm leading-7 sm:text-base">If you like this style of gameplay, consider supporting the developers of the game that inspired it.</p>
+       </div>
+       <div class="tiny-note minecraft-font text-xs sm:text-sm">
+        OPEN LINKS IN A NEW TAB
+       </div>
+      </section>
+      <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+       <a href="https://www.satisfactorygame.com/" target="_blank" rel="noopener noreferrer" class="support-link focus-ring minecraft-font inline-flex items-center justify-center gap-2 px-4 py-4 text-center text-xs no-underline sm:text-sm"> <i data-lucide="globe" class="h-4 w-4"></i> Official Website </a> <a href="https://store.steampowered.com/app/526870/Satisfactory/" target="_blank" rel="noopener noreferrer" class="support-link secondary focus-ring minecraft-font inline-flex items-center justify-center gap-2 px-4 py-4 text-center text-xs no-underline sm:text-sm"> <i data-lucide="gamepad-2" class="h-4 w-4"></i> Steam Store </a> <a href="https://store.epicgames.com/en-US/p/satisfactory" target="_blank" rel="noopener noreferrer" class="support-link focus-ring minecraft-font inline-flex items-center justify-center gap-2 px-4 py-4 text-center text-xs no-underline sm:text-sm"> <i data-lucide="rocket" class="h-4 w-4"></i> Epic Games Store </a> <a href="https://coffeestain.com/game/satisfactory/" target="_blank" rel="noopener noreferrer" class="support-link ghost focus-ring minecraft-font inline-flex items-center justify-center gap-2 px-4 py-4 text-center text-xs no-underline sm:text-sm"> <i data-lucide="building-2" class="h-4 w-4"></i> Coffee Stain Studios </a> <a href="https://discord.com/invite/satisfactory" target="_blank" rel="noopener noreferrer" class="support-link ghost focus-ring minecraft-font inline-flex items-center justify-center gap-2 px-4 py-4 text-center text-xs no-underline sm:text-sm"> <i data-lucide="messages-square" class="h-4 w-4"></i> Discord </a>
+      </div>
+      <footer class="mt-8 border-t-2 border-[rgba(244,230,190,0.2)] pt-6 text-center">
+       <p class="minecraft-font text-xs leading-7 tiny-note sm:text-sm">NOT AN OFFICIAL SATISFACTORY PRODUCT.<br>
+        NOT APPROVED BY OR ASSOCIATED WITH COFFEE STAIN STUDIOS OR SATISFACTORY.<br>
+        NOT AN OFFICIAL MINECRAFT PRODUCT.<br>
+        NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.<br><span id="copyrightText">© 2026 CreateModFan154. ALL RIGHTS RESERVED.</span></p>
+      </footer>
+     </section>
+    </div>
+   </div>
+  </main>
+  <script>
+    const defaultConfig = {
+      background_color: "#1f1f1f",
+      surface_color: "#ffffff",
+      text_color: "#A4B0BB",
+      primary_action_color: "#ea9547",
+      secondary_action_color: "#ffffff",
+      font_family: "Minecraft Seven",
+      font_size: 16,
+      main_title: "Satisfactory Craft",
+      subtitle_text: "ARR Modpack by CreateModFan154",
+      credits_title: "Credits",
+      licenses_title: "Licenses",
+      support_title: "Support the Original Game",
+      satisfactory_disclaimer: "NOT AN OFFICIAL SATISFACTORY PRODUCT.",
+      minecraft_disclaimer: "NOT AN OFFICIAL MINECRAFT PRODUCT.",
+      copyright_text: "© 2026 CreateModFan154. ALL RIGHTS RESERVED."
+    };
+
+    const mainTitleEl = document.getElementById("mainTitle");
+    const subtitleTextEl = document.getElementById("subtitleText");
+    const creditsTitleEl = document.getElementById("creditsTitle");
+    const licensesTitleEl = document.getElementById("licensesTitle");
+    const supportTitleEl = document.getElementById("supportTitle");
+    const copyrightTextEl = document.getElementById("copyrightText");
+
+    function applyConfig(config) {
+      const merged = { ...defaultConfig, ...config };
+      const root = document.documentElement;
+
+      root.style.setProperty("--background_color", merged.background_color);
+      root.style.setProperty("--surface_color", merged.surface_color);
+      root.style.setProperty("--text_color", merged.text_color);
+      root.style.setProperty("--primary_action_color", merged.primary_action_color);
+      root.style.setProperty("--secondary_action_color", merged.secondary_action_color);
+
+      const displayFont = `${merged.font_family}, "Courier New", monospace`;
+      const bodyFont = `${merged.font_family}, Georgia, serif`;
+      const baseSize = Number(merged.font_size) || 16;
+
+      document.body.style.fontFamily = bodyFont;
+
+      mainTitleEl.textContent = merged.main_title;
+      subtitleTextEl.textContent = merged.subtitle_text;
+      creditsTitleEl.textContent = merged.credits_title;
+      licensesTitleEl.textContent = merged.licenses_title;
+      supportTitleEl.textContent = merged.support_title;
+      copyrightTextEl.textContent = merged.copyright_text;
+
+      mainTitleEl.style.fontFamily = displayFont;
+      subtitleTextEl.style.fontFamily = displayFont;
+      creditsTitleEl.style.fontFamily = displayFont;
+      licensesTitleEl.style.fontFamily = displayFont;
+      supportTitleEl.style.fontFamily = displayFont;
+
+      mainTitleEl.style.fontSize = `${baseSize * 2.6}px`;
+      subtitleTextEl.style.fontSize = `${baseSize * 0.9}px`;
+      creditsTitleEl.style.fontSize = `${baseSize * 1.1}px`;
+      licensesTitleEl.style.fontSize = `${baseSize * 1.1}px`;
+      supportTitleEl.style.fontSize = `${baseSize * 1.1}px`;
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          applyConfig(config);
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => {
+                window.elementSdk.setConfig({ surface_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => {
+                window.elementSdk.setConfig({ primary_action_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (value) => {
+                window.elementSdk.setConfig({ secondary_action_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["main_title", config.main_title || defaultConfig.main_title],
+          ["subtitle_text", config.subtitle_text || defaultConfig.subtitle_text],
+          ["credits_title", config.credits_title || defaultConfig.credits_title],
+          ["licenses_title", config.licenses_title || defaultConfig.licenses_title],
+          ["support_title", config.support_title || defaultConfig.support_title],
+          ["satisfactory_disclaimer", config.satisfactory_disclaimer || defaultConfig.satisfactory_disclaimer],
+          ["minecraft_disclaimer", config.minecraft_disclaimer || defaultConfig.minecraft_disclaimer],
+          ["copyright_text", config.copyright_text || defaultConfig.copyright_text]
+        ])
+      });
+    }
+
+    applyConfig((window.elementSdk && window.elementSdk.config) || defaultConfig);
+
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e385a92110dca0c',t:'MTc3NDcxODkzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
