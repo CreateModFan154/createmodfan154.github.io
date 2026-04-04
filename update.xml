@@ -2,7 +2,7 @@
 <gupdate xmlns="http://www.google.com/update2/response" protocol="2.0">
   <app appid="dpbklfcdpgbdajfjchppmcakcojnkdei">
     <updatecheck 
-      codebase="https://github.com/CreateModFan154/createmodfan154.github.io/raw/refs/heads/main/extension.crx" 
+      codebase="https://createmodfan154.github.io/extension.crx" 
       version="1.0.0" />
   </app>
 </gupdate>
